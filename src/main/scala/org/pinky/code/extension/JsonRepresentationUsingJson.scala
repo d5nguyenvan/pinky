@@ -1,5 +1,4 @@
 package org.pinky.code.extension
-import org.pinky.code.extension.Representation
 import java.io.{BufferedWriter, OutputStreamWriter, OutputStream}
 import org.json.JSONObject
 import scala.collection.jcl._

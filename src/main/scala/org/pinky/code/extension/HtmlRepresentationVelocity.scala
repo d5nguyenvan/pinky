@@ -16,6 +16,7 @@ import java.io.{BufferedWriter, OutputStreamWriter, OutputStream}
  */
 class HtmlRepresentationVelocity @Inject()(ctx: ServletContext) extends Representation{
   val engine = new VelocityEngine()
+  engine.setProperty("runtime.log.logsystem.class","org.apache.velocity.runtime.log.JdkLogChute")
   engine.setProperty("file.resource.loader.path",ctx.getRealPath("/")+"template")
   // Initialize the engine
   engine.init()
