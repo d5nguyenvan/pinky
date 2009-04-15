@@ -22,6 +22,6 @@ class JsonRepresentationTest {
       data += "message" -> "hello world"
       val representation = new JsonRepresentation()
       representation.write(data,out)
-      assertThat(out.toString, is("{\"map\":{\"entry\":[{\"string\":[\"message\",\"hello world\"]}]}}"))
+      assertThat(out.toString, is("{\"map\": [\n  [\n    \"message\",\n    \"hello world\"\n  ]\n]}"))
   }
 }

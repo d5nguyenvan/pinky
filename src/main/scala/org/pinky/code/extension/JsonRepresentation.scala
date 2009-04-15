@@ -1,7 +1,7 @@
 package org.pinky.code.extension
 
 import _root_.com.thoughtworks.xstream.XStream
-import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver
 
 /**
  * Provides Json rendering, using the Jettison lib
@@ -10,6 +10,6 @@ import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver
  */
 
 class JsonRepresentation extends XmlRepresentation {
-  xstream = new XStream(new JettisonMappedXmlDriver());
+  xstream = new XStream(new JsonHierarchicalStreamDriver());
   xstream.setMode(XStream.NO_REFERENCES);
 }
