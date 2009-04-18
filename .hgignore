@@ -1,0 +1,9 @@
+\.orig$
+\.swp$
+\.orig\..*$
+\.chg\..*$
+\.rej$
+\.conflict\~$
+^target$
+^velocity.log$
+^\.DS_Store$
