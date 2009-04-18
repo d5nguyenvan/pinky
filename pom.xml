@@ -4,7 +4,11 @@
     <groupId>org.pinky.code</groupId>
     <artifactId>pinky</artifactId>
     <version>1.2-SNAPSHOT</version>
+
+    <name>Pinky</name>
+
     <packaging>jar</packaging>
+
 
     <repositories>
         <repository>
