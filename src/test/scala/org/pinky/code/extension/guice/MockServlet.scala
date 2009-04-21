@@ -3,7 +3,7 @@
  *
  */
 
-package org.pinky.code.extension.controlstructure.mock
+package org.pinky.code.extension.controlstructure
 
 import com.google.inject.Inject
 import extension.controlstructure.BaseControl
