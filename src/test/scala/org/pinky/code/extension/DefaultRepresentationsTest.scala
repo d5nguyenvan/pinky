@@ -1,42 +1,41 @@
 package org.pinky.code.extension
 
 
-
-
-
 import _root_.javax.servlet.ServletContext
-import _root_.org.junit.Test
 import org.pinky.code.extension._
 import org.mockito.Mockito._
-import org.hamcrest.MatcherAssert._
-import org.hamcrest.Matchers._
+import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Spec
+import com.jteigen.scalatest.JUnit4Runner
+import org.junit.runner.RunWith
 
-class DefaultRepresentationsTest {
+@RunWith(classOf[JUnit4Runner])
+class DefaultRepresentationsTest extends Spec with ShouldMatchers {
+  describe("a default representation") {
 
-@Test
-def it_should_create_modules {
-   var reps = new DefaultRepresentations()
-   reps.injectJsonRep(new JsonRepresentation())
-   reps.injecthtmlRep(new HtmlRepresentationFreeMarker(null))
-   reps.injectxmlRep(new XmlRepresentation())
-   reps.injectRssRep(new RssRepresentation())
-   assertThat (reps.mode("html"), is(classOf[HtmlRepresentationFreeMarker]) )
-   assertThat (reps.mode("xml"), is(classOf[XmlRepresentation]) )
-   assertThat (reps.mode("rss"), is(classOf[RssRepresentation]) )
-   assertThat (reps.mode("json"), is(classOf[JsonRepresentation]) )
-   assertThat (reps.mode.size, is(4))
+    it ("should create modules") {
+      var reps = new DefaultRepresentations()
+      reps.injectJsonRep(new JsonRepresentation())
+      reps.injecthtmlRep(new HtmlRepresentationFreeMarker(null))
+      reps.injectxmlRep(new XmlRepresentation())
+      reps.injectRssRep(new RssRepresentation())
+      reps.mode("html").getClass should equal (classOf[HtmlRepresentationFreeMarker])
+      reps.mode("xml").getClass should equal (classOf[XmlRepresentation])
+      reps.mode("rss").getClass should equal (classOf[RssRepresentation])
+      reps.mode("json").getClass  should equal (classOf[JsonRepresentation])
+      reps.mode.size should equal(4)
 
-}
+    }
 
-  @Test
-  def it_should_not_find_rss_module {
-     var reps = new DefaultRepresentations()
-     reps.injectJsonRep(new JsonRepresentation())
-     reps.injecthtmlRep(new HtmlRepresentationFreeMarker(null))
-     reps.injectxmlRep(new XmlRepresentation())
-     reps.injectRssRep(new XmlRepresentation())
-     assertThat (reps.mode("rss"), not( is(classOf[JsonRepresentation]) ) )
+    it ("should_not_find_rss_module") {
+      var reps = new DefaultRepresentations()
+      reps.injectJsonRep(new JsonRepresentation())
+      reps.injecthtmlRep(new HtmlRepresentationFreeMarker(null))
+      reps.injectxmlRep(new XmlRepresentation())
+      reps.injectRssRep(new XmlRepresentation())
+      reps.mode("rss").getClass should not equal(classOf[JsonRepresentation])
 
+    }
   }
 
 }

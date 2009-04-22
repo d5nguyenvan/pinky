@@ -6,7 +6,6 @@
 package org.pinky.code.extension.controlstructure
 
 import com.google.inject.Inject
-import extension.controlstructure.BaseControl
 import com.google.inject._
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
 

@@ -1,10 +1,13 @@
 package org.pinky.code.extension.controlstructure
+
 import _root_.org.junit.Test
 import com.google.inject.servlet.ServletModule
 import com.google.inject.{AbstractModule, Guice, Injector}
 import org.mockito.Mockito._
-import org.hamcrest.MatcherAssert._
-import org.hamcrest.Matchers._
+import org.scalatest.Spec
+import com.jteigen.scalatest.JUnit4Runner
+import org.junit.runner.RunWith
+import org.scalatest.matchers.ShouldMatchers
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,28 +17,37 @@ import org.hamcrest.Matchers._
  * To change this template use File | Settings | File Templates.
  */
 
-class PinkyServletContextListenerTest  {
+@RunWith(classOf[JUnit4Runner])
+class PinkyServletContextListenerTest extends Spec with ShouldMatchers {
+  describe("A Servlet Context Listener") {
 
-  @Test {val expected=classOf[java.lang.NullPointerException]}
-  def should_fail_since_modules_are_not_populated() {
-     val f = new PinkyServletContextListener() {
-      def getInjectorPublic(): Injector = {
-        super.getInjector
-     }
-     }
-     val i = f.getInjectorPublic
-     throw new Exception ("it should fail by now")
-  }
-   @Test 
-  def should_fail_pass() {
-     val f = new PinkyServletContextListener() {
-      def getInjectorPublic(): Injector = {
-        super.getInjector
-     }
-     }
-     f.modules=Array(new ServletModule(){})
-     val i = f.getInjectorPublic
-     assertThat (i.getClass.getName, is("com.google.inject.InjectorImpl"))
+    it("should_fail_since_modules_are_not_populated") {
+      var exceptionIsThrown = false
+      try {
+        val f = new PinkyServletContextListener() {
+          def getInjectorPublic(): Injector = {
+            super.getInjector
+          }
+        }
+        val i = f.getInjectorPublic
+        i.hashCode()
+      } catch {
+          case ex: NullPointerException => exceptionIsThrown = true
+          case _ =>
+      }
+      exceptionIsThrown should be (true)
+    }
+
+    it("should_fail_pass") {
+      val f = new PinkyServletContextListener() {
+        def getInjectorPublic(): Injector = {
+          super.getInjector
+        }
+      }
+      f.modules = Array(new ServletModule() {})
+      val i = f.getInjectorPublic
+      i.getClass.getName should equal("com.google.inject.InjectorImpl")
+    }
   }
 }
 
