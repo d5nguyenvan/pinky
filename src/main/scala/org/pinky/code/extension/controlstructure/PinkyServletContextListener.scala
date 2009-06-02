@@ -16,6 +16,7 @@ import com.google.inject.Guice
 class PinkyServletContextListener extends GuiceServletContextListener {
 
   var modules:Array[Module]=_
+  
 
   /**
   * @return Injector
