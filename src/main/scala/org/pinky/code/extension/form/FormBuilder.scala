@@ -13,20 +13,24 @@ import hibernate.validator.{ClassValidator, InvalidValue}
 
 abstract class Form   {
   
-  def render():String
-  
+  def render():String = {
+      render(this)
+  }
+  def render(form:Form):String = {
+
+  }
   def validate():Map[String,String] = {
-    selfValidate(this)
+    validate(this)
   }
   //this will go away with 2.8's default parameters but I could not find a better way to execute this method on
-  //class 
-  def selfValidate(obj:Form):Map[String,String]
+  // the actual class 
+  def validate(form:Form):Map[String,String]
 
 
 }
  
 trait TableBuilder extends Form {
-    def render():String = { ""
+    def render(form:Form):String = { ""
       //check methods
       //check annotation
       //check method type
@@ -35,21 +39,21 @@ trait TableBuilder extends Form {
 }
 
 trait ParagraphBuilder extends Form{
-    def render():String = { ""
+    def render(form:Form):String = { ""
     }
-}
+}                                                     
 
 trait UlTagBuilder extends Form{
-    def render():String = {
+    def render(form:Form):String = {
       ""
     }
 }
 
 trait Validator extends Form {
 
-  def selfValidate(obj:Form):Map[String,String] = {
+  def validate(form:Form):Map[String,String] = {
        var map:Map[String,String]=Map()
-       val validationMessages = Factory.formValidator.getInvalidValues(obj);
+       val validationMessages = Factory.formValidator.getInvalidValues(form);
        for (message <- validationMessages) {
          map += message.getPropertyName -> message.getMessage
        }
