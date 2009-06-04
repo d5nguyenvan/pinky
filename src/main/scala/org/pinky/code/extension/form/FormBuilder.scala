@@ -5,6 +5,7 @@ import annotation.form._
 import hibernate.validator.{Length, ClassValidator, InvalidValue}
 import java.lang.reflect.Method
 import java.lang.annotation.Annotation
+
 /**
  * Created by IntelliJ IDEA.
  * User: phausel
@@ -31,17 +32,26 @@ private[form] trait Render {
    }
 
   /**
-   * defines standard control structure for getting 
+   * defines standard control structure for building a form 
    * @form the form class
    */
    private[form] def basedOn(form:Form) (func:Function3[Form,Annotation,Method, String]) :String = {
-        var s = new StringBuffer()
+        var formBody = new StringBuffer()
+        var action = ""
+        var formType ="application/x-www-form-urlencoded"
+        // add fields
         for (method <- form.getClass.getMethods if method.getName.startsWith("get")) {
+            //check to see whether a custom action attribute needs to be set
+            if (method.getName.startsWith("getFormAction")) action = method.invoke(form).toString
             for (annotation <- method.getAnnotations ) {
-                s.append(func(form,annotation,method))
-            }
+                //check to see whether the form should be multipart
+                if (annotation.annotationType == classOf[Upload]) formType = "multipart/form-data"
+                //build the field widget              
+                formBody.append(func(form,annotation,method))
+            }  
         }
-        s.toString
+        //assemble the final form
+        <form action={action} method="POST" enctype={formType}>{formBody}</form>.toString
     }
 }
 
@@ -64,7 +74,7 @@ trait TableBuilder extends Form with Render {
           case a:Length =>
                   <tr><td>
                   <label for={"id_"+fieldFor(m)}>{labelFor(m)}</label>
-                  <input  id={"id_"+fieldFor(m)} type="text"  size={if (a.max =<20) a.max.toString else "20" } maxlength={a.max.toString} name={fieldFor(m)} value={m.invoke(form).toString}/>
+                  <input  id={"id_"+fieldFor(m)} type="text"  size={if (a.max <=20) a.max.toString else "20" } maxlength={a.max.toString} name={fieldFor(m)} value={m.invoke(form).toString}/>
                   </td></tr>.toString
           case a:Hidden =>
                 <tr><td>
@@ -84,9 +94,8 @@ trait TableBuilder extends Form with Render {
           case a:CheckBox =>
                   <tr><td>
                   </td></tr>.toString
+          case _=>""
 
-
-          case _=> _
           }
       }
     }
