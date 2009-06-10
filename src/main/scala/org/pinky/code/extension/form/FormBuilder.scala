@@ -1,7 +1,7 @@
 package org.pinky.code.extension.form
 
 
-import annotation.form._
+import annotation.form._  
 import hibernate.validator.{Length, ClassValidator, InvalidValue}
 import java.lang.reflect.Method
 import java.lang.annotation.Annotation
@@ -37,7 +37,7 @@ private[form] trait Render {
    */
    private[form] def basedOn(form:Form) (func:Function3[Form,Annotation,Method, String]) :String = {
         var formBody = new StringBuffer()
-        var action = ""
+        var action = ""    
         var formType ="application/x-www-form-urlencoded"
         // add fields
         for (method <- form.getClass.getMethods if method.getName.startsWith("get")) {
@@ -47,12 +47,29 @@ private[form] trait Render {
                 //check to see whether the form should be multipart
                 if (annotation.annotationType == classOf[Upload]) formType = "multipart/form-data"
                 //build the field widget              
-                formBody.append(func(form,annotation,method))
+                formBody.append(<label for={"id_"+fieldFor(method)}>{labelFor(method)}</label>.toString+func(form,annotation,method))
             }  
         }
         //assemble the final form
         <form action={action} method="POST" enctype={formType}>{formBody}</form>.toString
     }
+
+  private[form] def widget(form:Form,annotation:Annotation,method:Method):String = annotation match {
+    case a:Length =>
+      <input  id={"id_"+fieldFor(method)} type="text"  size={if (a.max <=20) a.max.toString else "20" } maxlength={a.max.toString} name={fieldFor(method)} value={method.invoke(form).toString}/>.toString
+    case a:Hidden =>
+      <input  id={"id_"+fieldFor(method)} type="hidden"  name={fieldFor(method)} value={method.invoke(form).toString}/>.toString
+    case a:Upload =>
+      <input  id={"id_"+fieldFor(method)} type="file"  size="40" name={fieldFor(method)} value={method.invoke(form).toString}/>.toString
+    case a:DropDown =>
+      <select><option value="audi">Audi</option></select>.toString
+    case a:RadioButton =>
+      <input type="radio" name="group1" value="Milk" /><input type="radio" name="group1" value="Butter" checked="" />.toString
+    case a:CheckBox =>
+       <input type="checkbox" name="group1" value="Milk" /><input type="radio" name="group1" value="Butter" checked="" />.toString
+    case _=>""
+  }
+
 }
 
 
@@ -60,58 +77,32 @@ abstract class Form   {
   def render:String
 }
 
-
-trait TableBuilder extends Form with Render {
-  /**
+ /**
    * renders the form using <tr><td> tags. note thoug, you will need to wrap the whole form in your own <table></table>
    * tags
    *
    */
-    override def render:String = {
-      // the whole thing is execuated on the host class
-      basedOn (this) {
-       (form:Form,annotation:Annotation,m:Method) => annotation match  {
-          case a:Length =>
-                  <tr><td>
-                  <label for={"id_"+fieldFor(m)}>{labelFor(m)}</label>
-                  <input  id={"id_"+fieldFor(m)} type="text"  size={if (a.max <=20) a.max.toString else "20" } maxlength={a.max.toString} name={fieldFor(m)} value={m.invoke(form).toString}/>
-                  </td></tr>.toString
-          case a:Hidden =>
-                <tr><td>
-                <input  id={"id_"+fieldFor(m)} type="hidden"  name={fieldFor(m)} value={m.invoke(form).toString}/>
-                </td></tr>.toString
-          case a:Upload =>
-               <tr><td>
-                <label for={"id_"+fieldFor(m)}>{labelFor(m)}</label>
-                <input  id={"id_"+fieldFor(m)} type="file"  size="40" name={fieldFor(m)} value={m.invoke(form).toString}/>
-                </td></tr>.toString
-          case a:DropDown =>
-                  <tr><td>
-                  </td></tr>.toString
-          case a:RadioButton =>
-                  <tr><td>
-                  </td></tr>.toString
-          case a:CheckBox =>
-                  <tr><td>
-                  </td></tr>.toString
-          case _=>""
 
-          }
-      }
+trait TableBuilder extends Form with Render {
+    override def render:String = basedOn (this) {
+      (form:Form,annotation:Annotation,method:Method) => <tr><td>{widget(form,annotation,method)}</td></tr>.toString
     }
-
 }
 
-trait ParagraphBuilder extends Form{
+trait ParagraphBuilder extends Form with Render {
+    override def render:String = basedOn (this) {
+      (form:Form,annotation:Annotation,method:Method) => <p>{widget(form,annotation,method)}</p>.toString
+    }
+}
 
-}                                                     
-
-trait UlTagBuilder extends Form{
-   
+trait UlTagBuilder extends Form with Render {
+     override def render:String = basedOn (this) {
+       (form:Form,annotation:Annotation,method:Method) => <li>{widget(form,annotation,method)}</li>.toString
+     }
 }
 
 trait Validator {
-  
+
   def validate:Map[String,String] = {
        var map:Map[String,String]=Map()
        val validationMessages = Factory.formValidator.getInvalidValues(this);
@@ -123,6 +114,5 @@ trait Validator {
   private object Factory {
     val formValidator = new ClassValidator( classOf[AnyRef] );
   }
-  
+
 }
-        
