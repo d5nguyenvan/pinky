@@ -1,9 +1,7 @@
 package org.pinky.code.extension
 
 
-import _root_.javax.servlet.ServletContext
 import org.pinky.code.extension._
-import org.mockito.Mockito._
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.Spec
 import com.jteigen.scalatest.JUnit4Runner

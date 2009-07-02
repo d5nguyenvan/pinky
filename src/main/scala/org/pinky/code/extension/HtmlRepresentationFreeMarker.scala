@@ -1,6 +1,5 @@
 package org.pinky.code.extension
 
-import _root_.javax.servlet.http.HttpServletRequest
 import _root_.javax.servlet.ServletContext
 import _root_.scala.collection.jcl.{MapWrapper, HashMap, Map}
 import com.google.inject.Inject

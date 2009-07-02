@@ -1,7 +1,6 @@
 package org.pinky.code.example.servlets
 
 
-
 import _root_.javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
 import _root_.scala.collection.jcl.{HashMap, ArrayList}
 import extension.{RssItem, RssHeader}
@@ -17,26 +16,25 @@ import java.text.DateFormat
  */
 
 @Singleton
-class ExampleRssServlet @Inject() (dispatch:BaseControl) extends HttpServlet {
-
+class ExampleRssServlet @Inject()(dispatch: BaseControl) extends HttpServlet {
   override def doGet(req: HttpServletRequest,
-                    res: HttpServletResponse) =
+                     res: HttpServletResponse) =
     {
-      dispatch.call(req, res){
+      dispatch.call(req, res) {
         //today's date
         val now = new Date();
         val today = DateFormat.getDateTimeInstance(
-            DateFormat.LONG, DateFormat.LONG).format(now)
-        
+          DateFormat.LONG, DateFormat.LONG).format(now)
+
         //create  header
-        var rssHeader = new RssHeader("Test","http://lolstation.com", "MISC MISC", today, today, "(C) 2009", "en-us")
+        var rssHeader = new RssHeader("Test", "http://lolstation.com", "MISC MISC", today, today, "(C) 2009", "en-us")
 
         //create items
         val rssList = List[RssItem](
-          new RssItem("item title","http://localstation.com/item11","description",
-          today,"http://localstation.com/item11#1")
-        )
-                
+          new RssItem("item title", "http://localstation.com/item11", "description",
+            today, "http://localstation.com/item11#1")
+          )
+
         //setup return values
         val data = new HashMap[String, AnyRef]
         data += "rssitems" -> rssList

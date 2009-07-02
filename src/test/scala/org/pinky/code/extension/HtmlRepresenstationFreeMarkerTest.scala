@@ -8,7 +8,7 @@ package org.pinky.code.extension
  */
 import _root_.javax.servlet.ServletContext
 import _root_.scala.collection.jcl.HashMap
-import java.io.{File, OutputStream, ByteArrayOutputStream}
+import java.io.ByteArrayOutputStream
 import org.pinky.code.extension._
 import org.mockito.Mockito._
 import org.scalatest.matchers.ShouldMatchers

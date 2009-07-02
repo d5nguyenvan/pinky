@@ -1,9 +1,7 @@
 package org.pinky.code.extension.controlstructure
 
-import _root_.org.junit.Test
 import com.google.inject.servlet.ServletModule
-import com.google.inject.{AbstractModule, Guice, Injector}
-import org.mockito.Mockito._
+import com.google.inject.Injector
 import org.scalatest.Spec
 import com.jteigen.scalatest.JUnit4Runner
 import org.junit.runner.RunWith
@@ -46,7 +44,7 @@ class PinkyServletContextListenerTest extends Spec with ShouldMatchers {
       }
       f.modules = Array(new ServletModule() {})
       val i = f.getInjectorPublic
-      i.getClass.getName should equal("com.google.inject.InjectorImpl")
+      i.getClass.getName should equal("com.google.inject.internal.InjectorImpl")
     }
   }
 }

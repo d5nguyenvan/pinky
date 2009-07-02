@@ -1,12 +1,10 @@
 package org.pinky.code.extension
 
 
-import _root_.org.junit.Test
 import _root_.scala.collection.jcl.HashMap
-import java.io.{File, ObjectOutputStream, OutputStream, ByteArrayOutputStream}
+import java.io.ByteArrayOutputStream
 import java.text.DateFormat
 import java.util.Date
-import org.mockito.Mockito._
 import org.scalatest.Spec
 import com.jteigen.scalatest.JUnit4Runner
 import org.junit.runner.RunWith

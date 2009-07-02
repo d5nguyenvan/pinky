@@ -1,7 +1,6 @@
 package org.pinky.code.extension.controlstructure
 
 
-import java.io.ByteArrayOutputStream
 import org.mockito.Mockito._
 import com.jteigen.scalatest.JUnit4Runner
 import org.junit.runner.RunWith

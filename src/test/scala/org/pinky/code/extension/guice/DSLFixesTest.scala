@@ -8,8 +8,8 @@ import org.scalatest.Spec
 import com.jteigen.scalatest.JUnit4Runner
 import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers
-
-import _root_.scala.collection.jcl.HashMap
+import org.pinky.code.extension.controlstructure.MockServlet
+import scala.collection.jcl.HashMap
 
 /**
  *  DSLFixes module tests
@@ -39,7 +39,7 @@ class DSLFixesTest extends Spec with ShouldMatchers {
       });
 
       val i = f.getInjectorPublic
-      i.getClass.getName should equal("com.google.inject.InjectorImpl")
+      i.getClass.getName should equal("com.google.inject.internal.InjectorImpl")
 
 
     }
@@ -65,7 +65,7 @@ class DSLFixesTest extends Spec with ShouldMatchers {
       });
 
       val i = f.getInjectorPublic
-      i.getClass.getName should equal("com.google.inject.InjectorImpl")
+      i.getClass.getName should equal("com.google.inject.internal.InjectorImpl")
 
     }
 
@@ -82,11 +82,12 @@ class DSLFixesTest extends Spec with ShouldMatchers {
         }
       }
       f.modules = Array(new ServletModule() {
+
         serve("/hello/*").withClass(classOf[MockServlet])
       });
 
       val i = f.getInjectorPublic
-      i.getClass.getName should equal("com.google.inject.InjectorImpl")
+      i.getClass.getName should equal("com.google.inject.internal.InjectorImpl")
 
 
     }
@@ -112,7 +113,7 @@ class DSLFixesTest extends Spec with ShouldMatchers {
       });
 
       val i = f.getInjectorPublic
-      i.getClass.getName should equal("com.google.inject.InjectorImpl")
+      i.getClass.getName should equal("com.google.inject.internal.InjectorImpl")
 
     }
 

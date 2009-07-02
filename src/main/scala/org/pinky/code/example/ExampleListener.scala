@@ -1,11 +1,8 @@
 package org.pinky.code.example
 
 
-import com.google.inject.servlet.ServletModule
-import extension._
 import extension.controlstructure._
-import com.google.inject.servlet.{ServletModule, GuiceServletContextListener}
-import com.google.inject.{AbstractModule, Guice, Injector, Module}
+import com.google.inject.servlet.ServletModule
 import servlets.{ExampleFilter, ExampleRssServlet, ExampleServlet}
 
 /**
@@ -17,20 +14,17 @@ import servlets.{ExampleFilter, ExampleRssServlet, ExampleServlet}
 
 class ExampleListener extends PinkyServletContextListener
 {
+  modules = Array(
+    new RepresentationModule(),
+    new ServletModule() {
 
-    modules = Array(
-      new RepresentationModule(),
-      new ServletModule(){
-
-        // Imports the DSL fixes for scala
-        // Note how we can import it in 
-        //    the precise scope it's gonna be used
-        import org.pinky.code.extension.guice.DSLFixes._
-
-        filter("/hello/*").through(classOf[ExampleFilter])
-        serve("*.rss").by(classOf[ExampleRssServlet])
-        serve("/hello/*").by(classOf[ExampleServlet])
-      }
+      // Imports the DSL fixes for scala
+      // Note how we can import it in
+      //    the precise scope it's gonna be used
+      filter("/hello/*").through(classOf[ExampleFilter])
+      serve("*.rss").by(classOf[ExampleRssServlet])
+      serve("/hello/*").by(classOf[ExampleServlet])
+    }
 
     )
 

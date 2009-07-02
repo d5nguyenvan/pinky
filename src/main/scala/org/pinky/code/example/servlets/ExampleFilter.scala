@@ -2,6 +2,7 @@ package org.pinky.code.example.servlets
 
 import _root_.javax.servlet._
 import com.google.inject._
+
 /**
  * Filter example which demonstrates a guice managed filter
  *
@@ -12,8 +13,8 @@ import com.google.inject._
 @Singleton
 class ExampleFilter extends Filter {
   def doFilter(request: ServletRequest,
-              response: ServletResponse,
-              chain: FilterChain) {
+               response: ServletResponse,
+               chain: FilterChain) {
     print("Within Simple Filter ... ");
     println("Filtering the Request ...");
 
@@ -24,5 +25,6 @@ class ExampleFilter extends Filter {
   }
 
   def destroy() {}
-  def init(config:FilterConfig) {}
+
+  def init(config: FilterConfig) {}
 }

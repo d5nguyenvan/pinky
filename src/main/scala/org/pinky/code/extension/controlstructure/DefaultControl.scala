@@ -1,7 +1,6 @@
 package org.pinky.code.extension.controlstructure
 
-import _root_.javax.servlet.http.{HttpServletResponse, HttpServletRequest}
-import _root_.scala.reflect.Manifest
+import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 import com.google.inject._
 import java.io.{BufferedWriter, OutputStreamWriter, PrintWriter, StringWriter}
 import scala.collection.jcl._

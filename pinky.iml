@@ -10,10 +10,10 @@
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
         </webroots>
         <building>
-          <setting name="EXPLODED_URL" value="file://" />
+          <setting name="EXPLODED_URL" value="file://$MODULE_DIR$/target/pinky-1.2-SNAPSHOT" />
           <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
+          <setting name="JAR_URL" value="file://$MODULE_DIR$/target/pinky-1.2-SNAPSHOT.war" />
+          <setting name="JAR_ENABLED" value="true" />
           <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
         </building>
         <packaging>
@@ -21,19 +21,15 @@
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
-          <containerElement type="library" name="scala" level="application">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/lib" />
-          </containerElement>
           <containerElement type="library" name="Maven: org.scala-lang:scala-library:2.7.4" level="project">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/lib/" />
           </containerElement>
-          <containerElement type="library" name="Maven: com.google.code.guice:guice:2.0" level="project">
+          <containerElement type="library" name="Maven: com.google.code.guice:guice:2.0.1" level="project">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/lib/" />
           </containerElement>
-          <containerElement type="library" name="Maven: com.google.code.guice:guice-servlet:2.0" level="project">
+          <containerElement type="library" name="Maven: com.google.code.guice:guice-servlet:2.0.1" level="project">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/lib/" />
           </containerElement>
@@ -117,10 +113,6 @@
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/lib/" />
           </containerElement>
-          <containerElement type="library" name="Maven: org.scala-tools.testing:scalatest:0.9.5" level="project">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/lib/" />
-          </containerElement>
         </packaging>
       </configuration>
     </facet>
@@ -139,19 +131,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="library" exported="" name="scala2.7.3" level="application" />
+    <orderEntry type="library" name="scala2.7.3" level="application" />
     <orderEntry type="library" exported="" name="Maven: org.scala-lang:scala-library:2.7.4" level="project" />
-    <orderEntry type="library" exported="" name="Maven: com.google.code.guice:guice:2.0" level="project" />
-    <orderEntry type="library" exported="" name="Maven: com.google.code.guice:guice-servlet:2.0" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.google.code.guice:guice:2.0.1" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.google.code.guice:guice-servlet:2.0.1" level="project" />
     <orderEntry type="library" exported="" name="Maven: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:servlet-api:2.4" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet.jsp:jsp-api:2.0" level="project" />
@@ -175,7 +158,7 @@
     <orderEntry type="library" exported="" name="Maven: org.codehaus.jettison:jettison:1.0.1" level="project" />
     <orderEntry type="library" exported="" name="Maven: stax:stax-api:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.jteigen.scalatest:junit4runner:1.0" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.scala-tools.testing:scalatest:0.9.5" level="project" />
+    <orderEntry type="library" name="Maven: org.scala-tools.testing:scalatest:0.9.5" level="project" />
     <orderEntry type="library" name="Maven: org.mockito:mockito-core:1.6" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.objenesis:objenesis:1.0" level="project" />

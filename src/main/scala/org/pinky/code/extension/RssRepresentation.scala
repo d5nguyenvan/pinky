@@ -1,6 +1,5 @@
 package org.pinky.code.extension
 
-import _root_.com.thoughtworks.xstream.XStream
 import java.io.{BufferedWriter, OutputStreamWriter, OutputStream}
 
 import scala.collection.jcl.Map
