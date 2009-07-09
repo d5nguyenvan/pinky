@@ -12,7 +12,7 @@ import scala.collection.jcl._
  * @author peter hausel gmail com (Peter Hausel)
  */
 
-class XmlRepresentation extends Representation {
+class  XmlRepresentation extends Representation {
   protected var xstream = new XStream();
   /**
   * @param data data coming from the user

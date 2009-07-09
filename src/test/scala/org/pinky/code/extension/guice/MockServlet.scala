@@ -3,10 +3,11 @@
  *
  */
 
-package org.pinky.code.extension.controlstructure
+package org.pinky.code.extension.guice
 
 import com.google.inject.Inject
 import com.google.inject._
+import controlstructure.BaseControl
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
 
 import _root_.scala.collection.jcl.HashMap

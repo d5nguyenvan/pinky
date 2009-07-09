@@ -1,15 +1,12 @@
-package org.pinky.code.extension.controlstructure.guice
+package org.pinky.code.extension.guice
 
-import _root_.org.junit.Test
 import com.google.inject.servlet.ServletModule
-import com.google.inject.{AbstractModule, Guice, Injector}
-import org.mockito.Mockito._
+import com.google.inject.Injector
+import controlstructure.PinkyServletContextListener
 import org.scalatest.Spec
 import com.jteigen.scalatest.JUnit4Runner
 import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers
-import org.pinky.code.extension.controlstructure.MockServlet
-import scala.collection.jcl.HashMap
 
 /**
  *  DSLFixes module tests
@@ -26,8 +23,6 @@ class DSLFixesTest extends Spec with ShouldMatchers {
 
   describe("A DSL workaround") {
     it("should_compile_ok_by_servlet") {
-
-      import org.pinky.code.extension.guice.DSLFixes._
 
       val f = new PinkyServletContextListener() {
         def getInjectorPublic(): Injector = {
@@ -50,8 +45,6 @@ class DSLFixesTest extends Spec with ShouldMatchers {
 
     it("should_compile_ok_by_servlet_map") {
 
-      import org.pinky.code.extension.guice.DSLFixes._
-
       val f = new PinkyServletContextListener() {
         def getInjectorPublic(): Injector = {
           super.getInjector
@@ -60,6 +53,7 @@ class DSLFixesTest extends Spec with ShouldMatchers {
 
       val params = new java.util.HashMap[String, String]();
 
+      import  org.pinky.code.extension.controlstructure
       f.modules = Array(new ServletModule() {
         serve("/hello/*").by(classOf[MockServlet], params)
       });
@@ -74,13 +68,13 @@ class DSLFixesTest extends Spec with ShouldMatchers {
      */
     it("should_compile_ok_withClass_servlet") {
 
-      import org.pinky.code.extension.guice.DSLFixes._
 
       val f = new PinkyServletContextListener() {
         def getInjectorPublic(): Injector = {
           super.getInjector
         }
       }
+      import guice.DSLFixes._
       f.modules = Array(new ServletModule() {
 
         serve("/hello/*").withClass(classOf[MockServlet])
@@ -98,8 +92,6 @@ class DSLFixesTest extends Spec with ShouldMatchers {
 
     it("should_compile_ok_withClass_servlet_map") {
 
-      import org.pinky.code.extension.guice.DSLFixes._
-
       val f = new PinkyServletContextListener() {
         def getInjectorPublic(): Injector = {
           super.getInjector
@@ -107,7 +99,7 @@ class DSLFixesTest extends Spec with ShouldMatchers {
       }
 
       val params = new java.util.HashMap[String, String]();
-
+      import guice.DSLFixes._
       f.modules = Array(new ServletModule() {
         serve("/hello/*").withClass(classOf[MockServlet], params)
       });
