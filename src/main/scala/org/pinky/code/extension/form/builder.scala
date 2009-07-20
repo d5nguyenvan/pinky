@@ -1,4 +1,4 @@
-package org.pinky.code.extension.form
+package org.pinky.code.extension.form.builder
 
 
 import annotation.form._
@@ -16,8 +16,8 @@ import java.lang.annotation.Annotation
 
 
 private[form] trait Builder {
+  private[form] def manifest[T](implicit m: scala.reflect.Manifest[T]) = m.toString
 
-  private[form] def manifest[T] (implicit m: scala.reflect.Manifest[T]) = m.toString
   /**
    * defines standard control structure for building a form
    * @form the form class
@@ -132,11 +132,15 @@ class Form(requestParams: scala.collection.jcl.Map[String, Array[String]]) {
         for (getter <- this.getClass.getMethods if (getter.getName.toLowerCase == setter.getName.toLowerCase.replace("_$eq", ""))) {
           val currentField = getter.invoke(this).asInstanceOf[Map[String, Boolean]]
           //set values whenever is possible
-          for (param <- paramValues) {
-            for (item <- currentField if (item._1 == param)) {currentField(item._1) = true}
-          }
-          //save field
-          setter.invoke(this, currentField)
+          if (currentField != null) {
+            for (param <- paramValues) {
+              for (item <- currentField) {
+                if (item._1 == param) currentField(item._1) = true
+              }
+            }
+            //save field
+            setter.invoke(this, currentField)
+          } 
         }
 
       } else setter.invoke(this, paramValues(0))
@@ -144,21 +148,20 @@ class Form(requestParams: scala.collection.jcl.Map[String, Array[String]]) {
   }
   private def isComplexWidget(method: Method): Boolean = {
     for (annotation <- method.getDeclaredAnnotations
-      if ( (annotation.annotationType == classOf[CheckBox] ||
+    if ((annotation.annotationType == classOf[CheckBox] ||
             annotation.annotationType == classOf[DropDown] ||
             annotation.annotationType == classOf[RadioButton]
-          ) //manifest check for Map[String,Array[String] should come here
-         )
+            ) //manifest check for Map[String,Array[String] should come here
+            )
     ) {
-      true
+      return true
     }
-    false
+    return false
   }
 
   def render: String = throw new Exception("this method should be overrriden")
 
 }
-
 
 
 /**
