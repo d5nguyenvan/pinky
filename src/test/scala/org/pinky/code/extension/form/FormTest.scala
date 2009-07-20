@@ -17,7 +17,7 @@ import scalatest.Spec
  */
 
 @RunWith(classOf[JUnit4Runner])
-class FormBuilderTest extends Spec with ShouldMatchers {
+class FormTest extends Spec with ShouldMatchers {
   class NewForm extends Form {
     @RadioButton
     var radioButton: Map[String, Boolean] = _
