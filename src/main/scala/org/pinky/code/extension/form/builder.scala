@@ -1,4 +1,4 @@
-package org.pinky.code.extension.form
+package org.pinky.code.extension.form.builder
 
 
 import annotation.form._

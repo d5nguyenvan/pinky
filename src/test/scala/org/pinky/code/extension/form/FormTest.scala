@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest
 import junit.runner.RunWith
 import scalatest.matchers.ShouldMatchers
 import scalatest.Spec
+import builder._
 
 /**
  * Created by IntelliJ IDEA.
