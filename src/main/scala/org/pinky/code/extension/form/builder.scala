@@ -5,7 +5,7 @@ import annotation.form._
 import hibernate.validator.{Length, ClassValidator}
 import java.lang.reflect.Method
 import java.lang.annotation.Annotation
-
+import scala.collection.mutable
 /**
  * Created by IntelliJ IDEA.
  * User: phausel
@@ -15,8 +15,46 @@ import java.lang.annotation.Annotation
  */
 
 
-private[form] trait Builder {
+private[form] trait Default  {
+  
+  def loadRequest(requestParams: scala.collection.jcl.Map[String, Array[String]]) = {
+     for ((key, paramValues) <- requestParams) {
+       for (setter <- this.getClass.getMethods if (setter.getName.toLowerCase.contains(key.toLowerCase + "_$eq"))) {
+         if (isComplexWidget(setter)) {
+           //first get the current field map if any
+           for (getter <- this.getClass.getMethods if (getter.getName.toLowerCase == setter.getName.toLowerCase.replace("_$eq", ""))) {
+             var currentField = getter.invoke(this).asInstanceOf[mutable.Map[String, Boolean]]
+             //set values whenever is possible
+             if (currentField != null) {
+               for (param <- paramValues) {
+                 for (item <- currentField) { if (item._1 == param) currentField(item._1) = true}
+               }
+               //save field
+               setter.invoke(this, currentField)
+             }
+           }
+         } else setter.invoke(this, paramValues(0))
+       }
+     }
+   }
+
+
   private[form] def manifest[T](implicit m: scala.reflect.Manifest[T]) = m.toString
+
+  private def isComplexWidget(method: Method): Boolean = {
+    for (annotation <- method.getDeclaredAnnotations
+    if ((annotation.annotationType == classOf[CheckBox] ||
+            annotation.annotationType == classOf[DropDown] ||
+            annotation.annotationType == classOf[RadioButton]
+            ) //manifest check for Map[String,Array[String] should come here
+            )
+    ) {
+      return true
+    }
+    return false
+  }
+
+
 
   /**
    * defines standard control structure for building a form
@@ -37,7 +75,7 @@ private[form] trait Builder {
           if (annotation.annotationType == classOf[Upload]) formType = "multipart/form-data"
           //build the widget field
           widget(form, annotation, getter) match {
-            case Some(field) => formBody.append(starttag + generateLabelFor(getter) + field + endtag)
+            case Some(field) => formBody.append(starttag+"\n" + generateLabelFor(getter)+"\n" + field+"\n" + endtag+"\n" )
             case None =>
           }
         }
@@ -60,15 +98,15 @@ private[form] trait Builder {
 
     case a: DropDown => {
       //return nothing if the return type does not match
-      if (method.getReturnType == classOf[Map[String, Boolean]]) {
+      if (method.getReturnType == classOf[mutable.Map[String, Boolean]]) {
         val optionTags = new StringBuffer()
-        val map = method.invoke(form).asInstanceOf[Map[String, Boolean]]
+        val map = method.invoke(form).asInstanceOf[mutable.Map[String, Boolean]]
         if (map == null || map.size == 0) throw new Exception("DropDown field needs at least one item")
         for ((key, value) <- map) {
           if (value)
-            optionTags.append(<option value={key.toLowerCase} selected=" ">{key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}</option>)
+            optionTags.append(<option value={key.toLowerCase} selected=" ">{key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}</option>+"\n")
           else
-            optionTags.append(<option value={key.toLowerCase}>{key.substring(0, 1).toUpperCase() + key.substring(1)}</option>)
+            optionTags.append(<option value={key.toLowerCase}>{key.substring(0, 1).toUpperCase() + key.substring(1)}</option>+"\n")
         }
         if (a.multi)
           Some(<select name={method.getName.toLowerCase} multiple=" ">{scala.xml.Unparsed(optionTags.toString)}</select>)
@@ -79,15 +117,15 @@ private[form] trait Builder {
     }
 
     case a: RadioButton => {
-      if (method.getReturnType == classOf[Map[String, Boolean]]) {
+      if (method.getReturnType == classOf[mutable.Map[String, Boolean]]) {
         val optionTags = new StringBuffer()
-        val map = method.invoke(form).asInstanceOf[Map[String, Boolean]]
+        val map = method.invoke(form).asInstanceOf[mutable.Map[String, Boolean]]
         if (map == null || map.size == 0) throw new Exception("Radiobutton field needs at least one item")
         for ((key, value) <- map) {
           if (value)
-            optionTags.append(<input type="radio" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase} selected=" "/>)
+            optionTags.append(<input type="radio" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase} selected=" "/>+"\n")
           else
-            optionTags.append(<input type="radio" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}/>)
+            optionTags.append(<input type="radio" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}/>+"\n")
         }
         Some(scala.xml.XML.loadString(optionTags.toString))
       } else
@@ -95,15 +133,15 @@ private[form] trait Builder {
     }
 
     case a: CheckBox => {
-      if (method.getReturnType == classOf[Map[String, Boolean]]) {
+      if (method.getReturnType == classOf[mutable.Map[String, Boolean]]) {
         val optionTags = new StringBuffer()
-        val map = method.invoke(form).asInstanceOf[Map[String, Boolean]]
+        val map = method.invoke(form).asInstanceOf[mutable.Map[String, Boolean]]
         if (map == null || map.size == 0) throw new Exception("CheckBox field needs at least one item")
         for ((key, value) <- map) {
           if (value)
-            optionTags.append(<input type="checkbox" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase} selected=" "/>)
+            optionTags.append(<input type="checkbox" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase} selected=" "/>+"\n")
           else
-            optionTags.append(<input type="checkbox" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}/>)
+            optionTags.append(<input type="checkbox" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}/>+"\n")
         }
         Some(scala.xml.XML.loadString(optionTags.toString))
       } else
@@ -118,56 +156,20 @@ private[form] trait Builder {
 }
 
 
+abstract class Form
 
-class Form(requestParams: scala.collection.jcl.Map[String, Array[String]]) {
-  //awkward way to simulate an optional param but it works until 2.8 comes out
-  def this() = {
-    this (new scala.collection.jcl.HashMap())
-  }
-
-  for ((key, paramValues) <- requestParams) {
-    for (setter <- this.getClass.getMethods if (setter.getName.toLowerCase.contains(key.toLowerCase + "_$eq"))) {
-      if (isComplexWidget(setter)) {
-        //first get the current field map if any
-        for (getter <- this.getClass.getMethods if (getter.getName.toLowerCase == setter.getName.toLowerCase.replace("_$eq", ""))) {
-          val currentField = getter.invoke(this).asInstanceOf[Map[String, Boolean]]
-          //set values whenever is possible
-          if (currentField != null) {
-            for (param <- paramValues) {
-              for (item <- currentField) {
-                if (item._1 == param) currentField(item._1) = true
-              }
-            }
-            //save field
-            setter.invoke(this, currentField)
-          } 
-        }
-
-      } else setter.invoke(this, paramValues(0))
-    }
-  }
-  private def isComplexWidget(method: Method): Boolean = {
-    for (annotation <- method.getDeclaredAnnotations
-    if ((annotation.annotationType == classOf[CheckBox] ||
-            annotation.annotationType == classOf[DropDown] ||
-            annotation.annotationType == classOf[RadioButton]
-            ) //manifest check for Map[String,Array[String] should come here
-            )
-    ) {
-      return true
-    }
-    return false
-  }
-
-  def render: String = throw new Exception("this method should be overrriden")
-
+trait Builder {
+   def render: String
+   def loadRequest(requestParams: scala.collection.jcl.Map[String, Array[String]])
 }
+
+
 
 
 /**
  * provides a form builder which outputs a form wrapped in a <tr><td>, note, you will need to provide the corresponding <table> tag
  */
-trait TableBuilder extends Form with Builder {
+trait TableBuilder extends Form with Builder with Default {
   override def render: String = basedOn(this, "<tr><td>", "</td></tr>")
 }
 
@@ -175,7 +177,7 @@ trait TableBuilder extends Form with Builder {
  * provides a form builder which outputs a form wrapped in a paragraph tag
  */
 
-trait ParagraphBuilder extends Form with Builder {
+trait ParagraphBuilder extends Form with Builder with Default {
   override def render: String = basedOn(this, "<p>", "</p>")
 }
 
@@ -183,7 +185,7 @@ trait ParagraphBuilder extends Form with Builder {
  * provides a form builder which outputs a form wrapped in a <li> tag, note, you will need to provide the corresponding <ul> tag
  */
 
-trait UlTagBuilder extends Form with Builder {
+trait UlTagBuilder extends Form with Builder with Default{
   override def render: String = basedOn(this, "<li>", "</li>")
 
 }
