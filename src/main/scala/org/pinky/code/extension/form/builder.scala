@@ -75,7 +75,7 @@ private[form] trait Default  {
           if (annotation.annotationType == classOf[Upload]) formType = "multipart/form-data"
           //build the widget field
           widget(form, annotation, getter) match {
-            case Some(field) => formBody.append(starttag+"\n" + generateLabelFor(getter)+"\n" + field+"\n" + endtag+"\n" )
+            case Some(field) => formBody.append(starttag+"\n" + generateLabelFor(getter)+"\n" + scala.xml.Unparsed(field)+"\n" + endtag+"\n" )
             case None =>
           }
         }
@@ -85,16 +85,16 @@ private[form] trait Default  {
     <form action={action} method="POST" enctype={formType}>{scala.xml.Unparsed(formBody.toString)}</form>.toString
   }
 
-  private[form] def widget(form: Form, annotation: Annotation, method: Method): Option[scala.xml.Elem] = annotation match {
+  private[form] def widget(form: Form, annotation: Annotation, method: Method): Option[String] = annotation match {
 
     case a: Length =>
-      Some(<input id={"id_" + method.getName.toLowerCase} type="text" size={if (a.max <= 20) a.max.toString else "20"} maxlength={a.max.toString} name={method.getName.toLowerCase} value={method.invoke(form).toString}/>)
+      Some(<input id={"id_" + method.getName.toLowerCase} type="text" size={if (a.max <= 20) a.max.toString else "20"} maxlength={a.max.toString} name={method.getName.toLowerCase} value={method.invoke(form).toString}/>.toString)
 
     case a: Hidden =>
-      Some(<input id={"id_" + method.getName.toLowerCase} type="hidden" name={method.getName.toLowerCase} value={method.invoke(form).toString}/>)
+      Some(<input id={"id_" + method.getName.toLowerCase} type="hidden" name={method.getName.toLowerCase} value={method.invoke(form).toString}/>.toString)
 
     case a: Upload =>
-      Some(<input id={"id_" + method.getName.toLowerCase} type="file" size="40" name={method.getName.toLowerCase} value={method.invoke(form).toString}/>)
+      Some(<input id={"id_" + method.getName.toLowerCase} type="file" size="40" name={method.getName.toLowerCase} value={method.invoke(form).toString}/>.toString)
 
     case a: DropDown => {
       //return nothing if the return type does not match
@@ -104,14 +104,14 @@ private[form] trait Default  {
         if (map == null || map.size == 0) throw new Exception("DropDown field needs at least one item")
         for ((key, value) <- map) {
           if (value)
-            optionTags.append(<option value={key.toLowerCase} selected=" ">{key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}</option>+"\n")
+            optionTags.append(<option value={key.toLowerCase} selected="">{key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}</option>+"\n")
           else
             optionTags.append(<option value={key.toLowerCase}>{key.substring(0, 1).toUpperCase() + key.substring(1)}</option>+"\n")
         }
         if (a.multi)
-          Some(<select name={method.getName.toLowerCase} multiple=" ">{scala.xml.Unparsed(optionTags.toString)}</select>)
+          Some(<select name={method.getName.toLowerCase} multiple=" ">{scala.xml.Unparsed(optionTags.toString)}</select>.toString)
         else
-          Some(<select name={method.getName.toLowerCase}>{scala.xml.Unparsed(optionTags.toString)}</select>)
+          Some(<select name={method.getName.toLowerCase}>{scala.xml.Unparsed(optionTags.toString)}</select>.toString)
       } else
         throw new Exception("a DropDown should have a type of Map[String, Boolean]")
     }
@@ -123,11 +123,11 @@ private[form] trait Default  {
         if (map == null || map.size == 0) throw new Exception("Radiobutton field needs at least one item")
         for ((key, value) <- map) {
           if (value)
-            optionTags.append(<input type="radio" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase} selected=" "/>+"\n")
+            optionTags.append(<input type="radio" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase} selected=""/>+"\n")
           else
             optionTags.append(<input type="radio" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}/>+"\n")
         }
-        Some(scala.xml.XML.loadString(optionTags.toString))
+        Some(optionTags.toString)
       } else
         throw new Exception("a RadioButton should have a type of Map[String, Boolean]")
     }
@@ -139,11 +139,11 @@ private[form] trait Default  {
         if (map == null || map.size == 0) throw new Exception("CheckBox field needs at least one item")
         for ((key, value) <- map) {
           if (value)
-            optionTags.append(<input type="checkbox" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase} selected=" "/>+"\n")
+            optionTags.append(<input type="checkbox" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase} selected=""/>+"\n")
           else
             optionTags.append(<input type="checkbox" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}/>+"\n")
         }
-        Some(scala.xml.XML.loadString(optionTags.toString))
+        Some(optionTags.toString)
       } else
         throw new Exception("a CheckBox should have a type of Map[String, Boolean]")
     }

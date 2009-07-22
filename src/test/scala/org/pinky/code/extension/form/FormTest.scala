@@ -1,6 +1,7 @@
 package org.pinky.code.extension.form
 
 import annotation.form._
+import collection.mutable.Map
 import com.jteigen.scalatest.JUnit4Runner
 import hibernate.validator.Length
 import javax.servlet.http.HttpServletRequest
@@ -8,7 +9,7 @@ import junit.runner.RunWith
 import scalatest.matchers.ShouldMatchers
 import scalatest.Spec
 import org.pinky.code.extension.form.builder._
-import scala.collection.mutable.Map
+
 /**
  * Created by IntelliJ IDEA.
  * User: phausel
@@ -30,7 +31,7 @@ class FormTest extends Spec with ShouldMatchers {
     var lastName: String = _
   }
 
-  class ValidFormRadioButton extends Form   {
+  class ValidFormRadioButton extends Form {
     @RadioButton
     var radioButton: Map[String, Boolean] = Map("name" -> false)
 
@@ -53,7 +54,7 @@ class FormTest extends Spec with ShouldMatchers {
   }
   class ValidCheckBox extends Form {
     @CheckBox {val multi = false}
-    var people: Map[String, Boolean] = Map("name" -> false)
+    var people: Map[String, Boolean] = Map("name" -> false,"Jon"->true)
 
     @Length {val max = 20}
     var firstName: String = _
@@ -64,15 +65,15 @@ class FormTest extends Spec with ShouldMatchers {
 
 
   describe("a Form") {
-    
-    it ("should work with incoming request parameter Map"){
-       val requestParams:scala.collection.jcl.Map[String,Array[String]] = new scala.collection.jcl.HashMap()
-       requestParams.put("drop",Array("ko"))
-       requestParams.put("firstname",Array("jon"))
-       val form = new ValidDropDown() with TableBuilder
-       form.loadRequest(requestParams) 
-       form.drop should equal (Map("ko"->true) )
-       form.firstName should equal ("jon")
+
+    it("should work with incoming request parameter Map") {
+      val requestParams: scala.collection.jcl.Map[String, Array[String]] = new scala.collection.jcl.HashMap()
+      requestParams.put("drop", Array("ko"))
+      requestParams.put("firstname", Array("jon"))
+      val form = new ValidDropDown() with TableBuilder
+      form.loadRequest(requestParams)
+      form.drop should equal(Map("ko" -> true))
+      form.firstName should equal("jon")
     }
     it("should complain about empty radioButton") {
       val form = new NewForm with TableBuilder
@@ -89,23 +90,34 @@ class FormTest extends Spec with ShouldMatchers {
       val form = new ValidFormRadioButton() with TableBuilder
       form.firstName = "lol"
       form.lastName = "yeah"
-      form.render should include ("<input value=\"yeah\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"lastname\" id=\"id_lastname\"></input>")
-      form.render should include ("<input value=\"lol\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"firstname\" id=\"id_firstname\"></input>")
-      form.render should include ("<input name=\"radiobutton\" type=\"radio\" value=\"Name\"></input>")
-      form.render should include ("<tr><td>")
-      form.render should include ("</td></tr>")
+      form.render should include("<input value=\"yeah\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"lastname\" id=\"id_lastname\"></input>")
+      form.render should include("<input value=\"lol\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"firstname\" id=\"id_firstname\"></input>")
+      form.render should include("<input value=\"Name\" type=\"radio\" name=\"radiobutton\"></input>")
+      form.render should include("<tr><td>")
+      form.render should include("</td></tr>")
     }
     it("should show a form with a DropDown") {
-      val form = new ValidDropDown() with TableBuilder
+      val form = new ValidDropDown() with ParagraphBuilder
       form.firstName = "lol"
       form lastName = "yeah"
-      //TODO:add new asserts
+      form.render should include("<input value=\"yeah\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"lastname\" id=\"id_lastname\"></input>")
+      form.render should include("<input value=\"lol\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"firstname\" id=\"id_firstname\"></input>")
+      form.render should include("<select name=\"drop\"><option value=\"ko\">Ko</option>")
+      form.render should not include("<tr><td>")
+      form.render should include("<p>")
+      form.render should include("</p>")
     }
     it("should show a form with a CheckBox") {
-      val form = new ValidCheckBox() with TableBuilder
+      val form = new ValidCheckBox() with UlTagBuilder
       form.firstName = "lol"
       form lastName = "yeah"
-       //TODO:add new asserts
+      form.render should include("<input value=\"yeah\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"lastname\" id=\"id_lastname\"></input>")
+      form.render should include("<input value=\"lol\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"firstname\" id=\"id_firstname\"></input>")
+      form.render should include ("<input value=\"Name\" type=\"checkbox\" name=\"people\"></input>")
+       form.render should include ("<input value=\"Jon\" selected=\"\" type=\"checkbox\" name=\"people\"></input>")
+      form.render should not include("<p>")
+      form.render should include("<li>")
+      form.render should include("</li>")
     }
 
 
