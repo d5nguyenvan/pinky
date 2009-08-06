@@ -6,17 +6,17 @@ import hibernate.validator.{Length, ClassValidator}
 import java.lang.reflect.Method
 import java.lang.annotation.Annotation
 import scala.collection.mutable
+
+
 /**
- * Created by IntelliJ IDEA.
- * User: phausel
- * Date: May 28, 2009
- * Time: 1:29:53 PM
- * To change this template use File | Settings | File Templates.
+ * defines default behaviour for prepopulating and rendering forms
  */
-
-
 private[form] trait Default  {
-  
+
+  /**
+   *  @requestParams incoming request param's param map
+   *  setting form data using reflection 
+   */
   def loadRequest(requestParams: scala.collection.jcl.Map[String, Array[String]]) = {
      for ((key, paramValues) <- requestParams) {
        for (setter <- this.getClass.getMethods if (setter.getName.toLowerCase.contains(key.toLowerCase + "_$eq"))) {
@@ -41,12 +41,15 @@ private[form] trait Default  {
 
   private[form] def manifest[T](implicit m: scala.reflect.Manifest[T]) = m.toString
 
+  /**
+   *  by complex widget we mean widgets that can vary in terms of size
+   */
   private def isComplexWidget(method: Method): Boolean = {
     for (annotation <- method.getDeclaredAnnotations
     if ((annotation.annotationType == classOf[CheckBox] ||
             annotation.annotationType == classOf[DropDown] ||
             annotation.annotationType == classOf[RadioButton]
-            ) //manifest check for Map[String,Array[String] should come here
+            ) 
             )
     ) {
       return true
@@ -55,9 +58,8 @@ private[form] trait Default  {
   }
 
 
-
   /**
-   * defines standard control structure for building a form
+   *  defines standard control structure for building a form
    * @form the form class
    */
   private[form] def basedOn(form: Form, starttag: String, endtag: String): String = {
@@ -85,6 +87,12 @@ private[form] trait Default  {
     <form action={action} method="POST" enctype={formType}>{scala.xml.Unparsed(formBody.toString)}</form>.toString
   }
 
+  /**
+   * @form incoming form
+   * @annotation  the annotation on the widget
+   * @method which is referencing the current widget
+   * renders the widget
+   */  
   private[form] def widget(form: Form, annotation: Annotation, method: Method): Option[String] = annotation match {
 
     case a: Length =>
@@ -95,6 +103,9 @@ private[form] trait Default  {
 
     case a: Upload =>
       Some(<input id={"id_" + method.getName.toLowerCase} type="file" size="40" name={method.getName.toLowerCase} value={method.invoke(form).toString}/>.toString)
+
+    case a:TextArea =>
+      Some(<textarea id={"id_" + method.getName.toLowerCase} name={method.getName.toLowerCase}  rows={a.rows.toString} cols={a.cols.toString} />.toString)
 
     case a: DropDown => {
       //return nothing if the return type does not match
@@ -155,19 +166,32 @@ private[form] trait Default  {
 
 }
 
-
+/**
+ * establishes a main base class for all form actions
+ */
 abstract class Form
 
+/**
+ * describes the main behavior of a builder
+ */
 trait Builder {
-   def render: String
-   def loadRequest(requestParams: scala.collection.jcl.Map[String, Array[String]])
+  /**
+   * renders the form
+   */
+  def render: String
+
+  /**
+   * @requestParam incoming request params
+   * prepopulates bean data based on a request's requestParamMap
+   */
+  def loadRequest(requestParams: scala.collection.jcl.Map[String, Array[String]])
 }
 
 
 
 
 /**
- * provides a form builder which outputs a form wrapped in a <tr><td>, note, you will need to provide the corresponding <table> tag
+ * provides a form builder which outputs a form wrapped in a <pre><tr><td></pre>, note, you will need to provide the corresponding <table> tag
  */
 trait TableBuilder extends Form with Builder with Default {
   override def render: String = basedOn(this, "<tr><td>", "</td></tr>")
@@ -182,7 +206,7 @@ trait ParagraphBuilder extends Form with Builder with Default {
 }
 
 /**
- * provides a form builder which outputs a form wrapped in a <li> tag, note, you will need to provide the corresponding <ul> tag
+ * provides a form builder which outputs a form wrapped in a <pre><li></li></pre> tag, note, you will need to provide the corresponding <ul> tag
  */
 
 trait UlTagBuilder extends Form with Builder with Default{
@@ -191,7 +215,9 @@ trait UlTagBuilder extends Form with Builder with Default{
 }
 
 
-
+/**
+ * provides validation using hibernate's validation framework, this feature does not depend on any builder
+ */
 trait Validator {
   def validate: Map[String, String] = {
     var map: Map[String, String] = Map()

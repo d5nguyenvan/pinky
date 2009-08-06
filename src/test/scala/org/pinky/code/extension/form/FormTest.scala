@@ -2,14 +2,13 @@ package org.pinky.code.extension.form
 
 import annotation.form._
 import collection.mutable.Map
-import com.jteigen.scalatest.JUnit4Runner
 import hibernate.validator.Length
 import javax.servlet.http.HttpServletRequest
-import junit.runner.RunWith
 import scalatest.matchers.ShouldMatchers
 import scalatest.Spec
 import org.pinky.code.extension.form.builder._
-
+import junit.runner.RunWith
+import com.jteigen.scalatest.JUnit4Runner
 /**
  * Created by IntelliJ IDEA.
  * User: phausel
