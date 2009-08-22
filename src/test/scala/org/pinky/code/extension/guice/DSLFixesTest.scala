@@ -2,11 +2,11 @@ package org.pinky.code.extension.guice
 
 import com.google.inject.servlet.ServletModule
 import com.google.inject.Injector
-import controlstructure.PinkyServletContextListener
 import org.scalatest.Spec
 import com.jteigen.scalatest.JUnit4Runner
 import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers
+import org.pinky.code.extension.controlstructure.PinkyServletContextListener
 
 /**
  *  DSLFixes module tests
@@ -53,7 +53,6 @@ class DSLFixesTest extends Spec with ShouldMatchers {
 
       val params = new java.util.HashMap[String, String]();
 
-      import  org.pinky.code.extension.controlstructure
       f.modules = Array(new ServletModule() {
         serve("/hello/*").by(classOf[MockServlet], params)
       });
@@ -74,7 +73,7 @@ class DSLFixesTest extends Spec with ShouldMatchers {
           super.getInjector
         }
       }
-      import guice.DSLFixes._
+      import org.pinky.code.extension.guice.DSLFixes._
       f.modules = Array(new ServletModule() {
 
         serve("/hello/*").withClass(classOf[MockServlet])
@@ -99,7 +98,7 @@ class DSLFixesTest extends Spec with ShouldMatchers {
       }
 
       val params = new java.util.HashMap[String, String]();
-      import guice.DSLFixes._
+      import org.pinky.code.extension.guice.DSLFixes._
       f.modules = Array(new ServletModule() {
         serve("/hello/*").withClass(classOf[MockServlet], params)
       });

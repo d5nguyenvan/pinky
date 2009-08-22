@@ -1,9 +1,9 @@
 package org.pinky.code.example
 
 
-import extension.controlstructure._
 import com.google.inject.servlet.ServletModule
 import servlets.{ExampleFilter, ExampleRssServlet, ExampleServlet}
+import org.pinky.code.extension.controlstructure.{RepresentationModule, PinkyServletContextListener}
 
 /**
  * Listener example which demonstrates how to configure guice managed filters, servlets and other components the "pinky way"

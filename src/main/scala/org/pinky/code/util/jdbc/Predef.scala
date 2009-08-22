@@ -3,12 +3,9 @@ package org.pinky.code.util.jdbc
 
 
 
-import collection.mutable.Map
-
-
-
-import collection.mutable.ListBuffer
 import java.sql._
+import collection.mutable.{Map,  ListBuffer}
+import org.pinky.code.util.Manifest._
 /**
  * based on <a href="http://scala.sygneca.com/code/simplifying-jdbc">this article</a><br>
  * <br>
@@ -80,25 +77,26 @@ object Predef {
       } else {l.toList}
     }
     //TODO: refactor this once default params in 2.8 get released
-    private def collectFor[X](rs: ResultSet, l: ListBuffer[X]): List[X] = {
+    private def collectFor[T](manifest:scala.reflect.Manifest[T],rs: ResultSet, l: ListBuffer[T]): List[T] = {
       if (rs.next) {                                                          
         var args = new ListBuffer[AnyRef]()
         for (i <- 1 to rs.getMetaData.getColumnCount) args += rs.getObject(i)
-        //for (
-        //TODO:determine apply method for type X
-        //based on that we should be able to do
-        //l+= method.invoke(X,args.toArray:_*)
-        collectFor(rs, l)
+        val constructor = manifest.erasure.getConstructors()(0)
+        l+= constructor.newInstance(args.toArray:_*).asInstanceOf[T]
+        collectFor(manifest,rs, l)
       } else l.toList
     }
     def queryWith(params:Any*): List[Map[String, AnyRef]] = {
       setStatementParams(params:_*)
       query
     }
-
+    def queryForWith[T](manifest: scala.reflect.Manifest[T],params:Any*): List[T] = {
+      setStatementParams(params:_*)
+      queryFor(manifest)
+    }
     def query: List[Map[String, AnyRef]] = collect(ps.executeQuery, new ListBuffer[Map[String, AnyRef]]())
 
-    def queryFor[T]:List[T] = collectFor[T](ps.executeQuery, new ListBuffer[T]())
+    def queryFor[T](manifest: scala.reflect.Manifest[T]) :List[T] = collectFor[T](manifest,ps.executeQuery, new ListBuffer[T]())
 
     def executeWith(params: Any*) {
       setStatementParams(params:_*)
@@ -139,7 +137,7 @@ object Predef {
     //prepared query for a List of Map
     def query(sql: String,  params:Any*): List[Map[String, AnyRef]] = new RichPreparedStatement(conn.prepareStatement(sql)).queryWith(params:_*)
     //prepared query for a List of Data classes
-    //def queryFor[T](sql: String,  params:Any*): List[T] = new RichPreparedStatement(conn.prepareStatement(sql)).queryFor[T](params:_*)
+    def queryFor[T](sql: String,  params:Any*)(implicit manifest: scala.reflect.Manifest[T]) : List[T] = new RichPreparedStatement(conn.prepareStatement(sql)).queryForWith[T](manifest,params:_*)
 
   }
 

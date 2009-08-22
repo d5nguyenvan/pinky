@@ -1,11 +1,13 @@
 package org.pinky.code.extension.form.builder
 
 
-import annotation.form._
-import hibernate.validator.{Length, ClassValidator}
+
+import org.hibernate.validator.{Length, ClassValidator}
 import java.lang.reflect.Method
 import java.lang.annotation.Annotation
 import scala.collection.mutable
+import org.pinky.code.annotation.form._
+import scala.collection.jcl
 
 
 /**
@@ -39,7 +41,6 @@ private[form] trait Default  {
    }
 
 
-  private[form] def manifest[T](implicit m: scala.reflect.Manifest[T]) = m.toString
 
   /**
    *  by complex widget we mean widgets that can vary in terms of size
@@ -84,7 +85,7 @@ private[form] trait Default  {
       }
     }
     //assemble the final form
-    <form action={action} method="POST" enctype={formType}>{scala.xml.Unparsed(formBody.toString)}</form>.toString
+    <form action={action} method="POST"  enctype={formType}>{scala.xml.Unparsed(formBody.toString)}</form>.toString
   }
 
   /**
@@ -218,9 +219,9 @@ trait UlTagBuilder extends Form with Builder with Default{
 /**
  * provides validation using hibernate's validation framework, this feature does not depend on any builder
  */
-trait Validator {
-  def validate: Map[String, String] = {
-    var map: Map[String, String] = Map()
+trait Validator extends Form{
+  def validate: jcl.Map[String, String] = {
+    var map: jcl.Map[String, String] = new jcl.HashMap()
     val validationMessages = Factory.formValidator.getInvalidValues(this);
     for (message <- validationMessages) {
       map += message.getPropertyName -> message.getMessage

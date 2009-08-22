@@ -1,14 +1,17 @@
 package org.pinky.code.extension.form
 
-import annotation.form._
+
 import collection.mutable.Map
-import hibernate.validator.Length
-import javax.servlet.http.HttpServletRequest
-import scalatest.matchers.ShouldMatchers
-import scalatest.Spec
+
 import org.pinky.code.extension.form.builder._
-import junit.runner.RunWith
+
 import com.jteigen.scalatest.JUnit4Runner
+import org.junit.runner.RunWith
+import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Spec
+import org.pinky.code.annotation.form.{CheckBox, DropDown, RadioButton}
+import org.hibernate.validator.Length
+
 /**
  * Created by IntelliJ IDEA.
  * User: phausel
@@ -110,10 +113,11 @@ class FormTest extends Spec with ShouldMatchers {
       val form = new ValidCheckBox() with UlTagBuilder
       form.firstName = "lol"
       form lastName = "yeah"
+      println(form.render)
       form.render should include("<input value=\"yeah\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"lastname\" id=\"id_lastname\"></input>")
       form.render should include("<input value=\"lol\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"firstname\" id=\"id_firstname\"></input>")
       form.render should include ("<input value=\"Name\" type=\"checkbox\" name=\"people\"></input>")
-       form.render should include ("<input value=\"Jon\" selected=\"\" type=\"checkbox\" name=\"people\"></input>")
+      form.render should include ("<input value=\"Jon\" selected=\"\" type=\"checkbox\" name=\"people\"></input>")
       form.render should not include("<p>")
       form.render should include("<li>")
       form.render should include("</li>")

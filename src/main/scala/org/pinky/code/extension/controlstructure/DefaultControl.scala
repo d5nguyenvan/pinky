@@ -4,9 +4,10 @@ import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 import com.google.inject._
 import java.io.{BufferedWriter, OutputStreamWriter, PrintWriter, StringWriter}
 import scala.collection.jcl._
+import org.pinky.code.extension.Representations
 
 
- /**
+/**
  * for the following call
  * <pre>
  *  dispatch.call(req, res){

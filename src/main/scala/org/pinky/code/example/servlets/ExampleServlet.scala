@@ -1,9 +1,9 @@
 package org.pinky.code.example.servlets
 
 import _root_.scala.collection.jcl.HashMap
-import extension.controlstructure.BaseControl
 import com.google.inject._
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
+import org.pinky.code.extension.controlstructure.BaseControl
 
 /**
  * A regular controller(serlvet) example

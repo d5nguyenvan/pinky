@@ -7,7 +7,9 @@ import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers
 import _root_.scala.collection.jcl._
 import _root_.javax.servlet.http.{HttpServletResponse, HttpServletRequest}
-import scalatest.Spec
+import org.pinky.code.extension.{Representation, Representations}
+import org.scalatest.Spec
+
 
 /**
  * Created by IntelliJ IDEA.
