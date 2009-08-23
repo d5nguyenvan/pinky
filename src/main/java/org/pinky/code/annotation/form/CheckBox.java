@@ -1,10 +1,11 @@
 package org.pinky.code.annotation.form;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.hibernate.validator.ValidatorClass;
 
+import java.lang.annotation.*;
+import org.pinky.code.extension.validator.CheckBoxValidator;
+@Documented
+@ValidatorClass(CheckBoxValidator.class)
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CheckBox {

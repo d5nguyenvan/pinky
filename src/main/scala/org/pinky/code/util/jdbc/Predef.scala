@@ -5,7 +5,7 @@ package org.pinky.code.util.jdbc
 
 import java.sql._
 import collection.mutable.{Map,  ListBuffer}
-import org.pinky.code.util.Manifest._
+
 /**
  * based on <a href="http://scala.sygneca.com/code/simplifying-jdbc">this article</a><br>
  * <br>
