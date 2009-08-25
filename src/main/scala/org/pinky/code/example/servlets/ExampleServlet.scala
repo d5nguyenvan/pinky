@@ -17,10 +17,6 @@ class ExampleServlet @Inject() (dispatch:BaseControl) extends HttpServlet {
   override def doGet(req: HttpServletRequest,
                     res: HttpServletResponse) =
     {
-      val map = Map(1->2)
-      val l:List[Int] = List(1,2,3)
-      val jo = new java.util.HashMap();
-
       dispatch.call(req, res){
         val data = new HashMap[String, AnyRef]
         //val params = captureIn(req,'name,'id)

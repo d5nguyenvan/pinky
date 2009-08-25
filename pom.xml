@@ -110,17 +110,16 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>3.1.0.GA</version>
+          <groupId>net.sf.oval</groupId>
+          <artifactId>oval</artifactId>
+          <version>1.32</version>
         </dependency>
-
 
         <!-- representations -->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.8</version>
+            <version>1.2.14</version>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>

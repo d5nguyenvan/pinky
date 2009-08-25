@@ -2,12 +2,15 @@ package org.pinky.code.extension.form.builder
 
 
 
-import org.hibernate.validator.{Length, ClassValidator}
 import java.lang.reflect.Method
 import java.lang.annotation.Annotation
 import scala.collection.mutable
 import org.pinky.code.annotation.form._
 import scala.collection.jcl
+import org.pinky.code.util.Memoize1
+import net.sf.oval.constraint.Length
+import net.sf.oval.ConstraintViolation
+import org.pinky.code.validator.{CustomOvalValidator}
 
 
 /**
@@ -218,18 +221,23 @@ trait UlTagBuilder extends Form with Builder with Default{
 
 /**
  * provides validation using hibernate's validation framework, this feature does not depend on any builder
+ * it returns a java list[Map] because it's most likely used from a java templating enginge
  */
 trait Validator extends Form{
-  def validate: jcl.Map[String, String] = {
-    var map: jcl.Map[String, String] = new jcl.HashMap()
-    val validationMessages = Factory.formValidator.getInvalidValues(this);
+  
+  def validate: java.util.List[java.util.Map[String, String]] = {
+    val list = new java.util.ArrayList[java.util.Map[String, String]]()
+    val validationMessages = List(Factory.validator.validateFor(this).toArray : _*).asInstanceOf[List[ConstraintViolation]]
     for (message <- validationMessages) {
-      map += message.getPropertyName -> message.getMessage
+      val m = new java.util.HashMap[String,String]()
+      m.put( message.getMessage.substring(
+                message.getMessage.lastIndexOf(".")+1,message.getMessage.indexOf(" ") )
+              ,message.getMessage.substring(message.getMessage.lastIndexOf(".")+1))
+      list.add(m)
     }
-    map
+    list
   }
   private object Factory {
-    val formValidator = new ClassValidator(classOf[AnyRef]);
+    val validator =  new CustomOvalValidator()
   }
-
 }

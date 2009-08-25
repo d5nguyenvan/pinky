@@ -10,7 +10,8 @@ import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.Spec
 import org.pinky.code.annotation.form.{CheckBox, DropDown, RadioButton}
-import org.hibernate.validator.Length
+import net.sf.oval.constraint.Length
+import reflect.BeanProperty
 
 /**
  * Created by IntelliJ IDEA.
@@ -64,7 +65,13 @@ class FormTest extends Spec with ShouldMatchers {
     @Length {val max = 20}
     var lastName: String = _
   }
+  class NoNValidForm extends Form {
+    @CheckBox {val multi = false}
+    var people: Map[String, Boolean] = Map("name" -> false,"Jon"->false)
+    @Length {val max = 20}
+    var lastName: String = "123456789123456789123456789123456789"
 
+  }
 
   describe("a Form") {
 
@@ -113,7 +120,6 @@ class FormTest extends Spec with ShouldMatchers {
       val form = new ValidCheckBox() with UlTagBuilder
       form.firstName = "lol"
       form lastName = "yeah"
-      println(form.render)
       form.render should include("<input value=\"yeah\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"lastname\" id=\"id_lastname\"></input>")
       form.render should include("<input value=\"lol\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"firstname\" id=\"id_firstname\"></input>")
       form.render should include ("<input value=\"Name\" type=\"checkbox\" name=\"people\"></input>")
@@ -122,7 +128,18 @@ class FormTest extends Spec with ShouldMatchers {
       form.render should include("<li>")
       form.render should include("</li>")
     }
+     it ("should not validate an invalid form") {
+      val form = new NoNValidForm() with UlTagBuilder with Validator
+      println("class(invalid):"+this+" message:"+form.validate)
+      form.validate.isEmpty should be (false)
+     }
 
+     it ("should validate a valid form") {
+      val form = new ValidCheckBox() with UlTagBuilder with Validator
+      println("class(valid):"+this+" message:"+form.validate)
+      form.validate.isEmpty should be (true)
+     }
+  
 
   }
 
