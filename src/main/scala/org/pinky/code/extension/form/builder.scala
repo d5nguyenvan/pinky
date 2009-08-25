@@ -6,8 +6,6 @@ import java.lang.reflect.Method
 import java.lang.annotation.Annotation
 import scala.collection.mutable
 import org.pinky.code.annotation.form._
-import scala.collection.jcl
-import org.pinky.code.util.Memoize1
 import net.sf.oval.constraint.Length
 import net.sf.oval.ConstraintViolation
 import org.pinky.code.validator.{CustomOvalValidator}
@@ -220,23 +218,32 @@ trait UlTagBuilder extends Form with Builder with Default{
 
 
 /**
- * provides validation using hibernate's validation framework, this feature does not depend on any builder
- * it returns a java list[Map] because it's most likely used from a java templating enginge
+ * provides validation using oval framework
  */
 trait Validator extends Form{
-  
-  def validate: java.util.List[java.util.Map[String, String]] = {
-    val list = new java.util.ArrayList[java.util.Map[String, String]]()
-    val validationMessages = List(Factory.validator.validateFor(this).toArray : _*).asInstanceOf[List[ConstraintViolation]]
-    for (message <- validationMessages) {
-      val m = new java.util.HashMap[String,String]()
-      m.put( message.getMessage.substring(
-                message.getMessage.lastIndexOf(".")+1,message.getMessage.indexOf(" ") )
-              ,message.getMessage.substring(message.getMessage.lastIndexOf(".")+1))
-      list.add(m)
-    }
+
+  import java.util.{List=>JList, Map=>JMap, HashMap, ArrayList}
+  import collection.jcl.Conversions._
+
+  /**
+   *
+   *@return it returns a java list[Map] because it's most likely used from a java templating enginge
+   */
+   */
+  def validate: JList[JMap[String, String]] = {
+    val list = new ArrayList[JMap[String, String]]()
+    val validationMessages = Factory.validator.validateFor(this)
+    for (message <- validationMessages) list.add(extract(message))
     list
   }
+
+  private def extract(m:ConstraintViolation):JMap[String,String] = {
+    val map = new HashMap[String,String]()
+    map.put( m.getMessage.substring( m.getMessage.lastIndexOf(".")+1,m.getMessage.indexOf(" ") )
+            ,m.getMessage.substring(m.getMessage.lastIndexOf(".")+1) )
+    map
+  }
+
   private object Factory {
     val validator =  new CustomOvalValidator()
   }
