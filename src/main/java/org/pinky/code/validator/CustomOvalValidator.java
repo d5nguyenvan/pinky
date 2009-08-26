@@ -76,7 +76,9 @@ import net.sf.oval.*;
  * User: phausel
  * Date: Aug 25, 2009
  * Time: 10:11:26 AM
- * To change this template use File | Settings | File Templates.
+ * TODO:I made two small changes to the original validator class(bypassing _$eq methods and providing a new name for the validate method <i>validateFor</i>), unfortunately just simply
+ * extending the original class did not work, due to the dependencies on class level private variables. Anyway, I know it's lame
+ * but it's good enough for now.
  */
 public class CustomOvalValidator extends Validator {
     private static final Log LOG = Log.getLog(CustomOvalValidator.class);

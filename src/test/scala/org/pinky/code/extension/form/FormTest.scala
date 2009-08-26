@@ -68,8 +68,7 @@ class FormTest extends Spec with ShouldMatchers {
   class NoNValidForm extends Form {
     @CheckBox {val multi = false}
     var people: Map[String, Boolean] = Map("name" -> false,"Jon"->false)
-    @Length {val max = 20}
-    var lastName: String = "123456789123456789123456789123456789"
+    
 
   }
 

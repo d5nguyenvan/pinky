@@ -2,8 +2,10 @@ package org.pinky.code.extension.validator
 
 import collection.mutable.Map
 import org.pinky.code.util.Elvis.?
-import org.hibernate.validator.{Validator, PropertyConstraint}
 import org.pinky.code.annotation.form.{CheckBox, RadioButton, DropDown}
+import net.sf.oval.configuration.annotation.AbstractAnnotationCheck
+import net.sf.oval.Validator
+import net.sf.oval.context.OValContext
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,7 +16,7 @@ import org.pinky.code.annotation.form.{CheckBox, RadioButton, DropDown}
  */
 
 trait BaseValidator {
-  def isValid(value:Object ):Boolean = {
+  def isSatisfied(validatedObject:Object, value:Object, context:OValContext, validator:Validator  ):Boolean = {
      ?(value) match {
        case Some(map) =>
          if (map.isInstanceOf[Map[String,Boolean]]) {
@@ -25,15 +27,6 @@ trait BaseValidator {
   }
 
 }
-class DropDownValidator extends Validator[DropDown] with BaseValidator {
-  def initialize(dropdown:DropDown)={}
-
-}
-class CheckBoxValidator extends Validator[CheckBox] with BaseValidator {
-  def initialize(checkbox:CheckBox)={}
-
-}
-class RadioButtonValidator extends Validator[RadioButton] with BaseValidator {
-  def initialize(radiobutton:RadioButton)={}
-
-}
+class DropDownValidator extends AbstractAnnotationCheck[DropDown] with BaseValidator 
+class CheckBoxValidator extends AbstractAnnotationCheck[CheckBox] with BaseValidator
+class RadioButtonValidator extends AbstractAnnotationCheck[RadioButton] with BaseValidator

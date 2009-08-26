@@ -220,7 +220,7 @@ trait UlTagBuilder extends Form with Builder with Default{
 /**
  * provides validation using oval framework
  */
-trait Validator extends Form{
+trait Validator {
 
   import java.util.{List=>JList, Map=>JMap, HashMap, ArrayList}
   import collection.jcl.Conversions._
@@ -228,7 +228,6 @@ trait Validator extends Form{
   /**
    *
    *@return it returns a java list[Map] because it's most likely used from a java templating enginge
-   */
    */
   def validate: JList[JMap[String, String]] = {
     val list = new ArrayList[JMap[String, String]]()

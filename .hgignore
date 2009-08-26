@@ -1,3 +1,6 @@
+\.classpath$
+\.project$
+\.manager$
 \.orig$
 \.swp$
 \.orig\..*$
