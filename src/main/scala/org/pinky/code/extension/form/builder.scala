@@ -9,7 +9,7 @@ import org.pinky.code.annotation.form._
 import net.sf.oval.constraint.Length
 import net.sf.oval.ConstraintViolation
 import org.pinky.code.validator.{CustomOvalValidator}
-
+import collection.jcl.Conversions._
 
 /**
  * defines default behaviour for prepopulating and rendering forms
@@ -20,7 +20,7 @@ private[form] trait Default  {
    *  @requestParams incoming request param's param map
    *  setting form data using reflection 
    */
-  def loadRequest(requestParams: scala.collection.jcl.Map[String, Array[String]]) = {
+  def loadRequest(requestParams: java.util.Map[String, Array[String]]) = {
      for ((key, paramValues) <- requestParams) {
        for (setter <- this.getClass.getMethods if (setter.getName.toLowerCase.contains(key.toLowerCase + "_$eq"))) {
          if (isComplexWidget(setter)) {
@@ -155,7 +155,7 @@ private[form] trait Default  {
             optionTags.append(<input type="checkbox" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase} selected=""/>+"\n")
           else
             optionTags.append(<input type="checkbox" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}/>+"\n")
-        }
+        }                                               
         Some(optionTags.toString)
       } else
         throw new Exception("a CheckBox should have a type of Map[String, Boolean]")
@@ -186,7 +186,7 @@ trait Builder {
    * @requestParam incoming request params
    * prepopulates bean data based on a request's requestParamMap
    */
-  def loadRequest(requestParams: scala.collection.jcl.Map[String, Array[String]])
+  def loadRequest(requestParams: java.util.Map[String, Array[String]])
 }
 
 

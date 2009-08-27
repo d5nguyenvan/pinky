@@ -75,7 +75,7 @@ class FormTest extends Spec with ShouldMatchers {
   describe("a Form") {
 
     it("should work with incoming request parameter Map") {
-      val requestParams: scala.collection.jcl.Map[String, Array[String]] = new scala.collection.jcl.HashMap()
+      val requestParams = new java.util.HashMap[String, Array[String]]()
       requestParams.put("drop", Array("ko"))
       requestParams.put("firstname", Array("jon"))
       val form = new ValidDropDown() with TableBuilder
