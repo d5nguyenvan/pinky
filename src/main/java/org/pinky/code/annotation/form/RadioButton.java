@@ -5,7 +5,7 @@ import net.sf.oval.configuration.annotation.Constraint;
 
 import java.lang.annotation.*;
 
-import org.pinky.code.extension.validator.RadioButtonValidator;
+import org.pinky.code.validator.RadioButtonValidator;
 
 @Constraint(checkWith = RadioButtonValidator.class)
 @Target(ElementType.METHOD)

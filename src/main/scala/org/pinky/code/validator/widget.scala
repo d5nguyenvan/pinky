@@ -1,4 +1,4 @@
-package org.pinky.code.extension.validator
+package org.pinky.code.validator
 
 import collection.mutable.Map
 import org.pinky.code.util.Elvis.?

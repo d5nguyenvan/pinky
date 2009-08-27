@@ -5,7 +5,7 @@ import net.sf.oval.configuration.annotation.Constraint;
 
 import java.lang.annotation.*;
 
-import org.pinky.code.extension.validator.DropDownValidator;
+import org.pinky.code.validator.DropDownValidator;
 
 @Constraint(checkWith = DropDownValidator.class)
 @Target(ElementType.METHOD)

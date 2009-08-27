@@ -1,6 +1,6 @@
 package org.pinky.code.annotation.form;
 
-import org.pinky.code.extension.validator.CheckBoxValidator;
+import org.pinky.code.validator.CheckBoxValidator;
 import net.sf.oval.configuration.annotation.Constraint;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
