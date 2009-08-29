@@ -225,7 +225,7 @@ trait Validator {
   import java.util.{List=>JList, Map=>JMap, HashMap, ArrayList}
   import collection.jcl.Conversions._
 
-  /**
+  /**                                       
    *
    *@return it returns a java list[Map] because it's most likely used from a java templating enginge
    */
