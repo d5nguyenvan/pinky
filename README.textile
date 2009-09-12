@@ -25,7 +25,7 @@ h3. Features
 * Easy access to Request/Response objects
 * Easy to integrate with existing projects (thanks to servlets)
 * Easy to extend
-* support for jdbc
+* new API to deal with jdbc
 * support for form generation and validation
 
 h1. what's new in 1.2
