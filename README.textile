@@ -1,0 +1,207 @@
+h1. new in 1.2
+
+"latest release":http://wiki.github.com/pk11/pinky/latest-release
+
+h1. Google App Engine (GAE) Demo
+
+http://pinky-demo.appspot.com/
+
+
+h1. User's Guide 
+
+h2. web.xml
+
+<pre>
+<code>
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4"
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" >
+  <display-name>Pinky</display-name>
+
+    <listener>
+        <listener-class>org.pinky.code.example.ExampleListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>webFilter</filter-name>
+        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>webFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+</web-app>
+</code>
+</pre>
+
+h2. Setting up components and URL Mapping
+
+<pre>
+<code>
+class ExampleListener extends PinkyServletContextListener
+  {
+
+    modules = Array(
+      new RepresentationModule(),
+      new ServletModule(){ 
+        filter("/hello/*").through(classOf[ExampleFilter])
+        serve("*.rss").by(classOf[ExampleRssServlet])
+        serve("/hello/*").by(classOf[ExampleServlet])
+      }
+     //Add your custom modules here
+     )
+ }
+</code>
+</pre>
+
+(Both filters and servlets can take regexp by using  "filterRegex and serveRegex":http://code.google.com/p/google-guice/source/browse/trunk/servlet/src/com/google/inject/servlet/ServletModule.java . Also, you might notice that Pinky-Guice Servlet's DSL is slightly different than the official DSL ie. "by" is used instead of "with". The reason is that "with" is a keyword in Scala, so Pinky is using a scala compatible version of Guice Servlet )
+
+h2. Filter Example
+
+<pre>
+<code>
+@Singleton
+class ExampleFilter extends Filter {
+  def doFilter(request: ServletRequest,
+              response: ServletResponse,
+              chain: FilterChain) {
+    print("Within Simple Filter ... ");
+    println("Filtering the Request ...");
+
+    chain.doFilter(request, response);
+
+    print("Within Simple Filter ... ");
+    println("Filtering the Response ...");
+  }
+
+  def destroy() {}
+  def init(config:FilterConfig) {}
+}
+</code>
+</pre>
+
+__(Note, this is actually just guice using Scala)__
+
+then if you hit __http://localhost:8080/pinky/hello/index.html__ in the log file you should see:
+<pre>
+Within Simple Filter ... Filtering the Request ...
+<controller logging>
+Within Simple Filter ... Filtering the Response ...
+</pre>
+
+
+h2. Controller Example
+
+<pre>
+<code>
+
+@Singleton
+class ExampleServlet @Inject() (dispatch:BaseControl) extends HttpServlet {
+
+  override def doGet(req: HttpServletRequest,
+                    res: HttpServletResponse) =
+    {
+      dispatch.call(req, res){
+        val data = new HashMap[String, AnyRef]
+        data += "message" -> "Hello World"
+        data
+      }
+
+    }
+    override def doPost (req: HttpServletRequest,
+                    res: HttpServletResponse) =
+
+    {
+      dispatch.call(req, res){
+        val data = new HashMap[String, AnyRef]
+        data += "message" -> "Changing state with POST"
+        data
+      }
+
+    }
+
+}
+</code>
+</pre>
+
+What's happening here is that Pinky's control structure executes the controller code, then renders the return data according to the URL extension (the default representation is set to html).
+
+
+Notice, we did not define the template location in the controller. By default templates are coming from __project_root/template/<uri_without_contextpath>+engine extension__. For the html call above the template is located at __./template/hello/index.html.vm__. This convention can be overwritten by setting  a __template__ Map entry in the controller servlet.
+
+
+h2. RSS Example
+
+<pre>
+<code>
+@Singleton
+class ExampleRssServlet @Inject() (dispatch:BaseControl) extends HttpServlet {
+
+  override def doGet(req: HttpServletRequest,
+                    res: HttpServletResponse) =
+    {
+      dispatch.call(req, res){
+        //today's date
+        val now = new Date();
+        val today = DateFormat.getDateTimeInstance(
+            DateFormat.LONG, DateFormat.LONG).format(now)
+        
+        //create  header
+        var rssHeader = new RssHeader("Test","http://lolstation.com", "MISC MISC", today, today, "(C) 2009", "en-us")
+
+        //create items
+        val rssList = List[RssItem](
+          new RssItem("item title","http://localstation.com/item11","description",
+          today,"http://localstation.com/item11#1")
+        )
+                
+        //setup return values
+        val data = new HashMap[String, AnyRef]
+        data += "rssitems" -> rssList
+        data += "rssheader" -> rssHeader
+        data
+      }
+
+    }
+
+</code>
+</pre>
+
+(For the rss call above the template is located at __/template/hello/index.rss.vm__ )
+
+
+
+
+
+
+h2. Default representations
+
+<pre>
+<code>
+class RepresentationModule extends AbstractModule {
+
+  protected def configure{
+    
+    bind(classOf[Representation]).annotatedWith(named("html")).to(classOf[HtmlRepresentationVelocity])
+    bind(classOf[Representation]).annotatedWith(named("rss")).to(classOf[RssRepresentation])
+    bind(classOf[Representation]).annotatedWith(named("xml")).to(classOf[XmlRepresentation])
+    bind(classOf[Representation]).annotatedWith(named("json")).to(classOf[JsonRepresentation])
+    bind(classOf[Representations]).to(classOf[DefaultRepresentations])
+    bind(classOf[BaseControl]).to(classOf[DefaultControl])
+
+  }
+}
+</code>
+</pre>
+
+
+These are the default representations, if you want to use FreeMarker instead of Velocity, then you'd need to replace  __HtmlRepresentatinVelocity__ with __HtmlRepresentationFreeMarker__ .
+
+h2. Getting Started 
+
+"clone pinky template":http://github.com/pk11/pinky-template/tree/ 
+
