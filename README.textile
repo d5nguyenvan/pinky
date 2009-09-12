@@ -236,4 +236,5 @@ h2. Getting Started
 "clone pinky template":http://github.com/pk11/pinky-template/tree/ 
 
 h2. License
+
 Pinky is under the "BSD license":http://github.com/pk11/pinky/blob/313f4f392fd3188c7f33c75faa4593b77a35de51/LICENSE
