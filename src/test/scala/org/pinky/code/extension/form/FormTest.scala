@@ -5,13 +5,12 @@ import collection.mutable.Map
 
 import org.pinky.code.extension.form.builder._
 
-import com.jteigen.scalatest.JUnit4Runner
-import org.junit.runner.RunWith
+
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.Spec
 import org.pinky.code.annotation.form.{CheckBox, DropDown, RadioButton}
 import net.sf.oval.constraint.Length
-import reflect.BeanProperty
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,7 +20,7 @@ import reflect.BeanProperty
  * To change this template use File | Settings | File Templates.
  */
 
-@RunWith(classOf[JUnit4Runner])
+
 class FormTest extends Spec with ShouldMatchers {
   class NewForm extends Form {
     @RadioButton

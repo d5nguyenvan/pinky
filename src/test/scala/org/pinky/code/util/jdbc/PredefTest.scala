@@ -2,11 +2,11 @@ package org.pinky.code.util.jdbc
 
 
 
-import com.jteigen.scalatest.JUnit4Runner
+
 import java.sql.DriverManager
 import DriverManager.{getConnection => connect}
 
-import org.junit.runner.RunWith
+
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.Spec
 import org.pinky.code.util.ARM.using
@@ -20,7 +20,7 @@ import org.pinky.code.util.jdbc.Predef._
  * Time: 1:02:42 PM
  * To change this template use File | Settings | File Templates.
  */
-@RunWith(classOf[JUnit4Runner])
+
 class PredefTest extends Spec with ShouldMatchers {
 
      describe("a jdbc utility") {

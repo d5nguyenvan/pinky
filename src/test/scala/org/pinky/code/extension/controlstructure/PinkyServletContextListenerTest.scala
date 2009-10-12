@@ -3,8 +3,6 @@ package org.pinky.code.extension.controlstructure
 import com.google.inject.servlet.ServletModule
 import com.google.inject.Injector
 import org.scalatest.Spec
-import com.jteigen.scalatest.JUnit4Runner
-import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers
 
 /**
@@ -15,7 +13,7 @@ import org.scalatest.matchers.ShouldMatchers
  * To change this template use File | Settings | File Templates.
  */
 
-@RunWith(classOf[JUnit4Runner])
+
 class PinkyServletContextListenerTest extends Spec with ShouldMatchers {
   describe("A Servlet Context Listener") {
 

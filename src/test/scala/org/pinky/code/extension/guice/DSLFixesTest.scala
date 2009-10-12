@@ -3,8 +3,6 @@ package org.pinky.code.extension.guice
 import com.google.inject.servlet.ServletModule
 import com.google.inject.Injector
 import org.scalatest.Spec
-import com.jteigen.scalatest.JUnit4Runner
-import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers
 import org.pinky.code.extension.controlstructure.PinkyServletContextListener
 
@@ -14,7 +12,7 @@ import org.pinky.code.extension.controlstructure.PinkyServletContextListener
  * @author fede silva gmail com   { fedesilva }
  */
 
-@RunWith(classOf[JUnit4Runner])
+
 class DSLFixesTest extends Spec with ShouldMatchers {
 
   /**

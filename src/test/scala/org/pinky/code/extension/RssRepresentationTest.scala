@@ -6,8 +6,7 @@ import java.io.ByteArrayOutputStream
 import java.text.DateFormat
 import java.util.Date
 import org.scalatest.Spec
-import com.jteigen.scalatest.JUnit4Runner
-import org.junit.runner.RunWith
+
 import org.scalatest.matchers.ShouldMatchers
 
 
@@ -18,7 +17,7 @@ import org.scalatest.matchers.ShouldMatchers
  * Time: 11:49:56 AM
  * To change this template use File | Settings | File Templates.
  */
-@RunWith(classOf[JUnit4Runner])
+
 class RssRepresentationTest extends Spec with ShouldMatchers {
   describe("An RSS representation") {
     it("should_fail_due_to_missing_items") {

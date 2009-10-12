@@ -3,8 +3,7 @@ package org.pinky.code.extension
 import _root_.scala.collection.jcl.HashMap
 import java.io.ByteArrayOutputStream
 import org.scalatest.Spec
-import com.jteigen.scalatest.JUnit4Runner
-import org.junit.runner.RunWith
+
 import org.scalatest.matchers.ShouldMatchers
 
 /**
@@ -14,7 +13,7 @@ import org.scalatest.matchers.ShouldMatchers
  * Time: 2:08:11 PM
  * To change this template use File | Settings | File Templates.
  */
-@RunWith(classOf[JUnit4Runner])
+
 class XmlRepresentationStraightScalaTest extends Spec with ShouldMatchers {
   describe("A scala based xml representation") {
     it("should_render_the_data") {

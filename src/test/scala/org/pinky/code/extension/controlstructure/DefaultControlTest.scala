@@ -2,8 +2,6 @@ package org.pinky.code.extension.controlstructure
 
 
 import org.mockito.Mockito._
-import com.jteigen.scalatest.JUnit4Runner
-import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers
 import _root_.scala.collection.jcl._
 import _root_.javax.servlet.http.{HttpServletResponse, HttpServletRequest}
@@ -19,7 +17,7 @@ import org.scalatest.Spec
  * To change this template use File | Settings | File Templates.
  */
 
-@RunWith(classOf[JUnit4Runner])
+
 class DefaultControlTest extends Spec with ShouldMatchers {
   var out: javax.servlet.ServletOutputStream = _
   var representation: Representations = _
@@ -27,7 +25,6 @@ class DefaultControlTest extends Spec with ShouldMatchers {
   var response: HttpServletResponse = _
   var modes: Map[String, Representation] = _
   var contentypes: Map[String, String] = _
-
 
   def mock_context() {
     out = mock(classOf[javax.servlet.ServletOutputStream])

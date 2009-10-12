@@ -10,11 +10,9 @@ package org.pinky.code.extension
 import _root_.scala.collection.jcl.HashMap
 import java.io.ByteArrayOutputStream
 import org.scalatest.Spec
-import com.jteigen.scalatest.JUnit4Runner
-import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers  
 
-@RunWith(classOf[JUnit4Runner])
+
 class XmlRepresentationTest extends Spec with ShouldMatchers{
 
   describe ("An XML Representation"){

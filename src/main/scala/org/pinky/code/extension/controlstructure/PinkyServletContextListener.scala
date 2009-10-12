@@ -13,7 +13,7 @@ import com.google.inject.Guice
  *
  * @author peter hausel gmail com (Peter Hausel)
  */
-class PinkyServletContextListener extends GuiceServletContextListener {
+abstract class PinkyServletContextListener extends GuiceServletContextListener {
 
   var modules:Array[Module]=_
   

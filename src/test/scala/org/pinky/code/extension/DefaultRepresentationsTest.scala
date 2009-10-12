@@ -4,10 +4,7 @@ package org.pinky.code.extension
 import org.pinky.code.extension._
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.Spec
-import com.jteigen.scalatest.JUnit4Runner
-import org.junit.runner.RunWith
 
-@RunWith(classOf[JUnit4Runner])
 class DefaultRepresentationsTest extends Spec with ShouldMatchers {
   describe("a default representation") {
 
