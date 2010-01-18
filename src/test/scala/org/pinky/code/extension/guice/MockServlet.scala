@@ -10,10 +10,10 @@ import com.google.inject._
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
 
 import _root_.scala.collection.jcl.HashMap
-import org.pinky.code.extension.controlstructure.BaseControl
+import org.pinky.code.extension.controlstructure.Dispatch
 
 @Singleton
-class MockServlet @Inject() (dispatch:BaseControl) extends HttpServlet {
+class MockServlet @Inject() (dispatch:Dispatch) extends HttpServlet {
 
     override def doGet(req: HttpServletRequest,
                      res: HttpServletResponse) =

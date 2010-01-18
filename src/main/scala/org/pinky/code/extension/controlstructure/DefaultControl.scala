@@ -25,7 +25,7 @@ import org.pinky.code.extension.Representations
  * @author peter hausel gmail com (Peter Hausel)
  */
 @Singleton
-  class  DefaultControl @Inject() (representation:Representations) extends BaseControl {
+  class  DefaultControl @Inject() (representation:Representations) extends Dispatch {
 
   /**
    * @param request

@@ -5,7 +5,7 @@ import _root_.javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpS
 import _root_.scala.collection.jcl.{HashMap, ArrayList}
 import extension.{RssItem, RssHeader}
 import com.google.inject._
-import extension.controlstructure.BaseControl
+import extension.controlstructure.Dispatch
 import java.util.Date
 import java.text.DateFormat
 
@@ -16,7 +16,7 @@ import java.text.DateFormat
  */
 
 @Singleton
-class ExampleRssServlet @Inject()(dispatch: BaseControl) extends HttpServlet {
+class ExampleRssServlet @Inject()(dispatch: Dispatch) extends HttpServlet {
   override def doGet(req: HttpServletRequest,
                      res: HttpServletResponse) =
     {

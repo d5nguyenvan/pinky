@@ -19,6 +19,6 @@ class RepresentationModule extends AbstractModule {
       bind(classOf[Representation]).annotatedWith(named("xml")).to(classOf[XmlRepresentation])
       bind(classOf[Representation]).annotatedWith(named("json")).to(classOf[JsonRepresentation])
       bind(classOf[Representations]).to(classOf[DefaultRepresentations])
-      bind(classOf[BaseControl]).to(classOf[DefaultControl])
+      bind(classOf[Dispatch]).to(classOf[DefaultControl])
     }
 }

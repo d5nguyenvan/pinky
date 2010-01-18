@@ -130,7 +130,7 @@ h2. Controller Example
 <code>
 
 @Singleton
-class ExampleServlet @Inject() (dispatch:BaseControl) extends HttpServlet {
+class ExampleServlet @Inject() (dispatch:Dispatch) extends HttpServlet {
 
   override def doGet(req: HttpServletRequest,
                     res: HttpServletResponse) =
@@ -169,7 +169,7 @@ h2. RSS Example
 <pre>
 <code>
 @Singleton
-class ExampleRssServlet @Inject() (dispatch:BaseControl) extends HttpServlet {
+class ExampleRssServlet @Inject() (dispatch:Dispatch) extends HttpServlet {
 
   override def doGet(req: HttpServletRequest,
                     res: HttpServletResponse) =
@@ -221,7 +221,7 @@ class RepresentationModule extends AbstractModule {
     bind(classOf[Representation]).annotatedWith(named("xml")).to(classOf[XmlRepresentation])
     bind(classOf[Representation]).annotatedWith(named("json")).to(classOf[JsonRepresentation])
     bind(classOf[Representations]).to(classOf[DefaultRepresentations])
-    bind(classOf[BaseControl]).to(classOf[DefaultControl])
+    bind(classOf[Dispatch]).to(classOf[DefaultControl])
 
   }
 }
