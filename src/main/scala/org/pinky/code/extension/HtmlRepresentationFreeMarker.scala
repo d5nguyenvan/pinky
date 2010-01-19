@@ -6,27 +6,26 @@ import com.google.inject.Inject
 import freemarker.template.{DefaultObjectWrapper, Configuration}
 import java.io.{File, BufferedWriter, OutputStreamWriter, OutputStream}
 
- /**
+/**
  * Provides FreeMarker rendering
  *
  * @param ctx the ServletContext is needed for the webapp path
  * @author peter hausel gmail com (Peter Hausel)
  */
 class HtmlRepresentationFreeMarker @Inject()(ctx: ServletContext) extends Representation {
-
   val cfg = new Configuration
 
   cfg.setObjectWrapper(new DefaultObjectWrapper())
   if (ctx != null)
-     cfg.setServletContextForTemplateLoading(ctx, "template")
+    cfg.setServletContextForTemplateLoading(ctx, "template")
   else {
-    cfg.setDirectoryForTemplateLoading( new File( new File (".").getCanonicalPath()+"/src/main/webapp/template"))
+    cfg.setDirectoryForTemplateLoading(new File(new File(".").getCanonicalPath() + "/src/main/webapp/template"))
   }
 
- /**
- * @param data data coming from the user
- * @param out outputstream used to print out the response 
- */
+  /**
+   * @param data data coming from the user
+   * @param out outputstream used to print out the response
+   */
   def write(data: Map[String, AnyRef], out: OutputStream) = {
     try {
       val templateFile = if (data("template").asInstanceOf[String].endsWith("ftl"))

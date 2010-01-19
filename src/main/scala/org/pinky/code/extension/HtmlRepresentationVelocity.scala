@@ -7,23 +7,23 @@ import _root_.scala.collection.jcl.{MapWrapper, HashMap, Map}
 import com.google.inject.Inject
 import java.io.{BufferedWriter, OutputStreamWriter, OutputStream}
 
- /**
+/**
  * Provides Velocity rendering, which is actually the default html rendering
  *
  * @param ctx the ServletContext is needed for the webapp path
  * @author peter hausel gmail com (Peter Hausel)
  */
-class HtmlRepresentationVelocity @Inject()(ctx: ServletContext) extends Representation{
+class HtmlRepresentationVelocity @Inject()(ctx: ServletContext) extends Representation {
   val engine = new VelocityEngine()
-  engine.setProperty("runtime.log.logsystem.class","org.apache.velocity.runtime.log.JdkLogChute")
-  engine.setProperty("file.resource.loader.path",ctx.getRealPath("/")+"template")
+  engine.setProperty("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.JdkLogChute")
+  engine.setProperty("file.resource.loader.path", ctx.getRealPath("/") + "template")
   // Initialize the engine
   engine.init()
 
   /**
-  * @param data data coming from the user
-  * @param out outputstream used to print out the response
-  */
+   * @param data data coming from the user
+   * @param out outputstream used to print out the response
+   */
   def write(data: Map[String, AnyRef], out: OutputStream) = {
     // Create the context
     try {

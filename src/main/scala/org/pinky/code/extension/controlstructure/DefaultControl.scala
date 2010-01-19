@@ -10,7 +10,7 @@ import org.pinky.code.extension.Representations
 /**
  * for the following call
  * <pre>
- *  dispatch.call(req, res){
+ *  dispatch.call(req, res) {
  *       val data = new HashMap[String, AnyRef]
  *       data += "message" -> "Hello World"
  *       data
@@ -25,7 +25,7 @@ import org.pinky.code.extension.Representations
  * @author peter hausel gmail com (Peter Hausel)
  */
 @Singleton
-  class  DefaultControl @Inject() (representation:Representations) extends Dispatch {
+class DefaultControl @Inject()(representation: Representations) extends Dispatch {
 
   /**
    * @param request
@@ -40,7 +40,7 @@ import org.pinky.code.extension.Representations
       val data = block
       val uri = getUri(request)
       val format = if (uri.lastIndexOf(".") != -1) uri.substring(uri.lastIndexOf(".") + 1, uri.length) else "html"
-      if  (format == "html")  data.get("template") match {case None => data += "template" -> uri; case _ => {}}
+      if (format == "html") data.get("template") match {case None => data += "template" -> uri; case _ => {}}
       route(data, uri, format, response)
     } catch {
       case e: Exception => {
@@ -53,43 +53,46 @@ import org.pinky.code.extension.Representations
 
 
   }
+
   /**
-  *  @param request
-  *  @return request uri without context path
-  *
-  */
-  private def getUri(request: HttpServletRequest):String = {request.getRequestURI.replaceFirst(request.getContextPath,"")}
- /**
-  * @param data user data
-  * @param uri  incoming request URI
-  * @param response response is needed for content type 
-  */
+   * @param request
+   * @return request uri without context path
+   *
+   */
+  private def getUri(request: HttpServletRequest): String = {request.getRequestURI.replaceFirst(request.getContextPath, "")}
+
+  /**
+   * @param data user data
+   * @param uri incoming request URI
+   * @param response response is needed for content type
+   */
   protected def route(data: Map[String, AnyRef], uri: String, ext: String, response: HttpServletResponse) {
     response.setContentType(representation.contentType(ext))
     representation.mode(ext).write(data, response.getOutputStream)
   }
+
   /**
    * This method provides the template for error messages
-  *  @param error  takes the error message
-  *
-  */
+   * @param error takes the error message
+   *
+   */
   private def errorResponse(error: String) = {
     val ret =
     <html>
-    <body>
-    <div>
-    {error}
-    </div>
-    </body>
+      <body>
+        <div>
+          {error}
+        </div>
+      </body>
     </html>;
     ret.toString
   }
 
- /**
-  * This method provides the template for error messages
-  *  @param t the exception which needs to be printed in the response 
-  *
-  */
+  /**
+   * This method provides the template for error messages
+   * @param t the exception which needs to be printed in the response
+   *
+   */
   private def printEx(t: Throwable): String =
     {
       val sw = new StringWriter();

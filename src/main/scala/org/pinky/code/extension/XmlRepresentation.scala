@@ -12,12 +12,13 @@ import scala.collection.jcl._
  * @author peter hausel gmail com (Peter Hausel)
  */
 
-class  XmlRepresentation extends Representation {
+class XmlRepresentation extends Representation {
   protected var xstream = new XStream();
+
   /**
-  * @param data data coming from the user
-  * @param out outputstream used to print out the response
-  */
+   * @param data data coming from the user
+   * @param out outputstream used to print out the response
+   */
   def write(data: Map[String, AnyRef], out: OutputStream) = {
     data.removeKey("template")
     val outWriter = new BufferedWriter(new OutputStreamWriter(out))

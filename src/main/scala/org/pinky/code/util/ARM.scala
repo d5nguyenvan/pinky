@@ -5,25 +5,25 @@ package org.pinky.code.util
  * <br><br>
  *  generic ARM block to support calls like
  * <pre>
- * for (conn &lt;- using (ds.getConnection) {//do something with datasource}
+ * for (conn &lt;- using (ds.getConnection)  { //do something with datasource }
  * </pre>
  * or a nested one
  * <pre>
- * for (outer <- using (new PipeStream()) {
- *  for (inner <- using (new PipeStream()) {
+ * for (outer <- using (new PipeStream())  {
+ *  for (inner <- using (new PipeStream())  {
  * //do something with outer and inner
- *  }
+ * }
  * }
  * </pre>
  */
 object ARM {
-  /**                                     
+  /**
    * @resource the reasource that needs to be wrapped around
    */
   case class using[T <: {def close()}](resource: T) {
-   /**
-   * execute block in the proper scope
-   */
+    /**
+     * execute block in the proper scope
+     */
     def foreach(f: T => Unit): Unit =
       try {
         f(resource)

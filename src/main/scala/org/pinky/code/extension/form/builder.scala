@@ -1,7 +1,6 @@
 package org.pinky.code.extension.form.builder
 
 
-
 import java.lang.reflect.Method
 import java.lang.annotation.Annotation
 import scala.collection.mutable
@@ -14,33 +13,32 @@ import collection.jcl.Conversions._
 /**
  * defines default behaviour for prepopulating and rendering forms
  */
-private[form] trait Default  {
+private[form] trait Default {
 
   /**
-   *  @requestParams incoming request param's param map
+   * @requestParams incoming request param's param map
    *  setting form data using reflection 
    */
   def loadRequest(requestParams: java.util.Map[String, Array[String]]) = {
-     for ((key, paramValues) <- requestParams) {
-       for (setter <- this.getClass.getMethods if (setter.getName.toLowerCase.contains(key.toLowerCase + "_$eq"))) {
-         if (isComplexWidget(setter)) {
-           //first get the current field map if any
-           for (getter <- this.getClass.getMethods if (getter.getName.toLowerCase == setter.getName.toLowerCase.replace("_$eq", ""))) {
-             var currentField = getter.invoke(this).asInstanceOf[mutable.Map[String, Boolean]]
-             //set values whenever is possible
-             if (currentField != null) {
-               for (param <- paramValues) {
-                 for (item <- currentField) { if (item._1 == param) currentField(item._1) = true}
-               }
-               //save field
-               setter.invoke(this, currentField)
-             }
-           }
-         } else setter.invoke(this, paramValues(0))
-       }
-     }
-   }
-
+    for ((key, paramValues) <- requestParams) {
+      for (setter <- this.getClass.getMethods if (setter.getName.toLowerCase.contains(key.toLowerCase + "_$eq"))) {
+        if (isComplexWidget(setter)) {
+          //first get the current field map if any
+          for (getter <- this.getClass.getMethods if (getter.getName.toLowerCase == setter.getName.toLowerCase.replace("_$eq", ""))) {
+            var currentField = getter.invoke(this).asInstanceOf[mutable.Map[String, Boolean]]
+            //set values whenever is possible
+            if (currentField != null) {
+              for (param <- paramValues) {
+                for (item <- currentField) {if (item._1 == param) currentField(item._1) = true}
+              }
+              //save field
+              setter.invoke(this, currentField)
+            }
+          }
+        } else setter.invoke(this, paramValues(0))
+      }
+    }
+  }
 
 
   /**
@@ -48,11 +46,11 @@ private[form] trait Default  {
    */
   private def isComplexWidget(method: Method): Boolean = {
     for (annotation <- method.getDeclaredAnnotations
-    if ((annotation.annotationType == classOf[CheckBox] ||
-            annotation.annotationType == classOf[DropDown] ||
-            annotation.annotationType == classOf[RadioButton]
-            ) 
-            )
+         if ((annotation.annotationType == classOf[CheckBox] ||
+                 annotation.annotationType == classOf[DropDown] ||
+                 annotation.annotationType == classOf[RadioButton]
+                 )
+                 )
     ) {
       return true
     }
@@ -79,22 +77,24 @@ private[form] trait Default  {
           if (annotation.annotationType == classOf[Upload]) formType = "multipart/form-data"
           //build the widget field
           widget(form, annotation, getter) match {
-            case Some(field) => formBody.append(starttag+"\n" + generateLabelFor(getter)+"\n" + scala.xml.Unparsed(field)+"\n" + endtag+"\n" )
+            case Some(field) => formBody.append(starttag + "\n" + generateLabelFor(getter) + "\n" + scala.xml.Unparsed(field) + "\n" + endtag + "\n")
             case None =>
           }
         }
       }
     }
     //assemble the final form
-    <form action={action} method="POST"  enctype={formType}>{scala.xml.Unparsed(formBody.toString)}</form>.toString
+    <form action={action} method="POST" enctype={formType}>
+      {scala.xml.Unparsed(formBody.toString)}
+    </form>.toString
   }
 
   /**
    * @form incoming form
-   * @annotation  the annotation on the widget
+   * @annotation the annotation on the widget
    * @method which is referencing the current widget
    * renders the widget
-   */  
+   */
   private[form] def widget(form: Form, annotation: Annotation, method: Method): Option[String] = annotation match {
 
     case a: Length =>
@@ -106,8 +106,8 @@ private[form] trait Default  {
     case a: Upload =>
       Some(<input id={"id_" + method.getName.toLowerCase} type="file" size="40" name={method.getName.toLowerCase} value={method.invoke(form).toString}/>.toString)
 
-    case a:TextArea =>
-      Some(<textarea id={"id_" + method.getName.toLowerCase} name={method.getName.toLowerCase}  rows={a.rows.toString} cols={a.cols.toString} />.toString)
+    case a: TextArea =>
+      Some(<textarea id={"id_" + method.getName.toLowerCase} name={method.getName.toLowerCase} rows={a.rows.toString} cols={a.cols.toString}/>.toString)
 
     case a: DropDown => {
       //return nothing if the return type does not match
@@ -117,14 +117,22 @@ private[form] trait Default  {
         if (map == null || map.size == 0) throw new Exception("DropDown field needs at least one item")
         for ((key, value) <- map) {
           if (value)
-            optionTags.append(<option value={key.toLowerCase} selected="">{key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}</option>+"\n")
+            optionTags.append(<option value={key.toLowerCase} selected=" ">
+              {key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}
+            </option> + "\n")
           else
-            optionTags.append(<option value={key.toLowerCase}>{key.substring(0, 1).toUpperCase() + key.substring(1)}</option>+"\n")
+            optionTags.append(<option value={key.toLowerCase}>
+              {key.substring(0, 1).toUpperCase() + key.substring(1)}
+            </option> + "\n")
         }
         if (a.multi)
-          Some(<select name={method.getName.toLowerCase} multiple=" ">{scala.xml.Unparsed(optionTags.toString)}</select>.toString)
+          Some(<select name={method.getName.toLowerCase} multiple=" ">
+            {scala.xml.Unparsed(optionTags.toString)}
+          </select>.toString)
         else
-          Some(<select name={method.getName.toLowerCase}>{scala.xml.Unparsed(optionTags.toString)}</select>.toString)
+          Some(<select name={method.getName.toLowerCase}>
+            {scala.xml.Unparsed(optionTags.toString)}
+          </select>.toString)
       } else
         throw new Exception("a DropDown should have a type of Map[String, Boolean]")
     }
@@ -136,9 +144,9 @@ private[form] trait Default  {
         if (map == null || map.size == 0) throw new Exception("Radiobutton field needs at least one item")
         for ((key, value) <- map) {
           if (value)
-            optionTags.append(<input type="radio" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase} selected=""/>+"\n")
+            optionTags.append(<input type="radio" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase} selected=" "/> + "\n")
           else
-            optionTags.append(<input type="radio" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}/>+"\n")
+            optionTags.append(<input type="radio" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}/> + "\n")
         }
         Some(optionTags.toString)
       } else
@@ -152,10 +160,10 @@ private[form] trait Default  {
         if (map == null || map.size == 0) throw new Exception("CheckBox field needs at least one item")
         for ((key, value) <- map) {
           if (value)
-            optionTags.append(<input type="checkbox" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase} selected=""/>+"\n")
+            optionTags.append(<input type="checkbox" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase} selected=" "/> + "\n")
           else
-            optionTags.append(<input type="checkbox" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}/>+"\n")
-        }                                               
+            optionTags.append(<input type="checkbox" name={method.getName.toLowerCase} value={key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase}/> + "\n")
+        }
         Some(optionTags.toString)
       } else
         throw new Exception("a CheckBox should have a type of Map[String, Boolean]")
@@ -164,7 +172,9 @@ private[form] trait Default  {
     case _ => None
   }
 
-  private[form] def generateLabelFor(getter: Method): String = <label for={"id_" + getter.getName.toLowerCase}>{getter.getName.toLowerCase + ":"}</label>.toString
+  private[form] def generateLabelFor(getter: Method): String = <label for={"id_" + getter.getName.toLowerCase}>
+    {getter.getName.toLowerCase + ":"}
+  </label>.toString
 
 }
 
@@ -190,8 +200,6 @@ trait Builder {
 }
 
 
-
-
 /**
  * provides a form builder which outputs a form wrapped in a <pre><tr><td></pre>, note, you will need to provide the corresponding <table> tag
  */
@@ -211,7 +219,7 @@ trait ParagraphBuilder extends Form with Builder with Default {
  * provides a form builder which outputs a form wrapped in a <pre><li></li></pre> tag, note, you will need to provide the corresponding <ul> tag
  */
 
-trait UlTagBuilder extends Form with Builder with Default{
+trait UlTagBuilder extends Form with Builder with Default {
   override def render: String = basedOn(this, "<li>", "</li>")
 
 }
@@ -221,13 +229,12 @@ trait UlTagBuilder extends Form with Builder with Default{
  * provides validation using oval framework
  */
 trait Validator {
-
-  import java.util.{List=>JList, Map=>JMap, HashMap, ArrayList}
+  import java.util.{List => JList, Map => JMap, HashMap, ArrayList}
   import collection.jcl.Conversions._
 
-  /**                                       
+  /**
    *
-   *@return it returns a java list[Map] because it's most likely used from a java templating enginge
+   * @return it returns a java list[Map] because it's most likely used from a java templating enginge
    */
   def validate: JList[JMap[String, String]] = {
     val list = new ArrayList[JMap[String, String]]()
@@ -236,14 +243,14 @@ trait Validator {
     list
   }
 
-  private def extract(m:ConstraintViolation):JMap[String,String] = {
-    val map = new HashMap[String,String]()
-    map.put( m.getMessage.substring( m.getMessage.lastIndexOf(".")+1,m.getMessage.indexOf(" ") )
-            ,m.getMessage.substring(m.getMessage.lastIndexOf(".")+1) )
+  private def extract(m: ConstraintViolation): JMap[String, String] = {
+    val map = new HashMap[String, String]()
+    map.put(m.getMessage.substring(m.getMessage.lastIndexOf(".") + 1, m.getMessage.indexOf(" "))
+      , m.getMessage.substring(m.getMessage.lastIndexOf(".") + 1))
     map
   }
 
   private object Factory {
-    val validator =  new CustomOvalValidator()
+    val validator = new CustomOvalValidator()
   }
 }

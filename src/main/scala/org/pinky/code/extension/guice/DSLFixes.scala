@@ -1,4 +1,6 @@
-package org.pinky.code.extension.guice;
+package org.pinky.code.extension.guice
+
+;
 
 
 
@@ -19,64 +21,62 @@ import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
  *
  *   This are the methods we will hide
  *   <code>
- *   public static interface ServletKeyBindingBuilder {
+ *   public static interface ServletKeyBindingBuilder  {
  *       void with(Class<? extends HttpServlet> servletKey);
  *       void with(Key<? extends HttpServlet> servletKey);
  *       void with(Class<? extends HttpServlet> servletKey, Map<String, String> contextParams);
  *       void with(Key<? extends HttpServlet> servletKey, Map<String, String> contextParams);
- *   }
+ * }
  *   </code>
  *
- * @author fede silva gmail com {fedesilva}
+ * @author fede silva gmail com  { fedesilva }
  *
  */
 object DSLFixes {
 
-    /**
-     * The rich type.
-     * @author fede silva gmail com {fedesilva}
-     */
-    class RichBuilder( builder: ServletModule.ServletKeyBindingBuilder ){
+  /**
+   * The rich type.
+   * @author fede silva gmail com  { fedesilva }
+   */
+  class RichBuilder(builder: ServletModule.ServletKeyBindingBuilder) {
+    def by[T <: HttpServlet](servletKey: Class[T]) {builder.`with`(servletKey)};
 
-        def by[T <: HttpServlet]( servletKey: Class[T] ){ builder.`with`(servletKey) };
-
-        def by[T <: HttpServlet](
-            servletKey: Class[T], params: java.util.Map[String, String] ) { builder.`with`(servletKey, params) };
+    def by[T <: HttpServlet](
+            servletKey: Class[T], params: java.util.Map[String, String]) {builder.`with`(servletKey, params)};
 
 
-        def by[T <: HttpServlet]( servletKey: Key[T] ){ builder.`with`(servletKey) };
+    def by[T <: HttpServlet](servletKey: Key[T]) {builder.`with`(servletKey)};
 
-        def by[T <: HttpServlet, S](
+    def by[T <: HttpServlet, S](
             servletKey: Key[T],
-            params: java.util.Map[String, String] ){ builder.`with`(servletKey, params) };
+            params: java.util.Map[String, String]) {builder.`with`(servletKey, params)};
 
 
-        def withClass[T <: HttpServlet]( servletKey: Class[T] ){
-            builder.`with`(servletKey)
-        };
+    def withClass[T <: HttpServlet](servletKey: Class[T]) {
+      builder.`with`(servletKey)
+    };
 
-        def withClass[T <: HttpServlet](
+    def withClass[T <: HttpServlet](
             servletKey: Class[T],
-            params: java.util.Map[String, String] ){ builder.`with`(servletKey, params) };
+            params: java.util.Map[String, String]) {builder.`with`(servletKey, params)};
 
-        def withClass[T <: HttpServlet]( servletKey: Key[T] ){
-            builder.`with`(servletKey)
-        };
+    def withClass[T <: HttpServlet](servletKey: Key[T]) {
+      builder.`with`(servletKey)
+    };
 
-        def withClass[T <: HttpServlet](
+    def withClass[T <: HttpServlet](
             servletKey: Key[T],
-            params: java.util.Map[String, String] ){ builder.`with`(servletKey, params) };
+            params: java.util.Map[String, String]) {builder.`with`(servletKey, params)};
 
-    }
+  }
 
-    /**
-     * The implicit type conversion.
-     * @author fede silva gmail com {fedesilva}
-     */
-    implicit def builderToRichBuilder(
-        builder: ServletModule.ServletKeyBindingBuilder ) = new RichBuilder(builder);
+  /**
+   * The implicit type conversion.
+   * @author fede silva gmail com  { fedesilva }
+   */
+  implicit def builderToRichBuilder(
+          builder: ServletModule.ServletKeyBindingBuilder) = new RichBuilder(builder);
 
-    
 
 }
 

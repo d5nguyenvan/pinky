@@ -18,7 +18,7 @@ import org.scalatest.Spec
  */
 
 
-class DefaultControlTest extends Spec with ShouldMatchers {
+class DispatchTest extends Spec with ShouldMatchers {
   var out: javax.servlet.ServletOutputStream = _
   var representation: Representations = _
   var request: HttpServletRequest = _

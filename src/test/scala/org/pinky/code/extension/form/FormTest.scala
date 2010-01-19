@@ -109,7 +109,8 @@ class FormTest extends Spec with ShouldMatchers {
       form lastName = "yeah"
       form.render should include("<input value=\"yeah\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"lastname\" id=\"id_lastname\"></input>")
       form.render should include("<input value=\"lol\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"firstname\" id=\"id_firstname\"></input>")
-      form.render should include("<select name=\"drop\"><option value=\"ko\">Ko</option>")
+      form.render should include("<select name=\"drop\">")
+      form.render should include("<option value=\"ko\">")
       form.render should not include("<tr><td>")
       form.render should include("<p>")
       form.render should include("</p>")
@@ -121,7 +122,7 @@ class FormTest extends Spec with ShouldMatchers {
       form.render should include("<input value=\"yeah\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"lastname\" id=\"id_lastname\"></input>")
       form.render should include("<input value=\"lol\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"firstname\" id=\"id_firstname\"></input>")
       form.render should include ("<input value=\"Name\" type=\"checkbox\" name=\"people\"></input>")
-      form.render should include ("<input value=\"Jon\" selected=\"\" type=\"checkbox\" name=\"people\"></input>")
+      form.render should include ("<input value=\"Jon\" selected=\" \" type=\"checkbox\" name=\"people\"></input>")
       form.render should not include("<p>")
       form.render should include("<li>")
       form.render should include("</li>")

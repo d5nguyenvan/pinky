@@ -14,18 +14,17 @@ import com.google.inject.Guice
  * @author peter hausel gmail com (Peter Hausel)
  */
 abstract class PinkyServletContextListener extends GuiceServletContextListener {
+  var modules: Array[Module] = _
 
-  var modules:Array[Module]=_
-  
 
   /**
-  * @return Injector
-  * creates a guice injector from modules passed in via modules Array, without the array
-  * this thing is not functioning
-  * 
-  *
-  */
+   * @return Injector
+   * creates a guice injector from modules passed in via modules Array, without the array
+   * this thing is not functioning
+   *
+   *
+   */
   override protected def getInjector(): Injector = {
-    Guice.createInjector(modules:_*)
+    Guice.createInjector(modules: _*)
   }
 }
