@@ -1,10 +1,16 @@
 package org.pinky.code.extension.controlstructure
 
-import  scala.collection.jcl._
+import scala.collection.jcl._
 import org.scalatest.Spec
 import org.scalatest.matchers.ShouldMatchers
 import org.pinky.code.example.servlets._
 import org.pinky.code.extension.controlstructure.ActorDispatch
+import java.util.concurrent.{TimeUnit, CountDownLatch}
+import se.scalablesolutions.akka.actor.Actor
+import org.mockito.Mockito._
+import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
+import org.pinky.code.util.LatchSupport._
+import org.pinky.code.extension.controlstructure.ActorDispatch._
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,14 +20,45 @@ import org.pinky.code.extension.controlstructure.ActorDispatch
  * To change this template use File | Settings | File Templates.
  */
 
-class ActorClientTest extends Spec with ShouldMatchers with ActorDispatch {
-    //right now this is more like a functional test but i still do not know how to look into
-    //actors internals
-    describe("an ActorClient") {
+
+class ActorClientTest extends Spec with ShouldMatchers {
+
+
+  //prepare mocks
+  trait CountDownActors extends Actors {
+    override val pongActor = new PongActor with CountDown
+    override val pingActor = new PingActor(pongActor) with CountDown
+  }
+
+  class DispatchMock extends Dispatch {
+    def call(request: HttpServletRequest, response: HttpServletResponse)(block: => Map[String, AnyRef]) {
+      block
+    }
+  }
+
+  describe("an ActorClient") {
+    it("should receive only one message if actors coming in wrong order") {
+      latch = new CountDownLatch(1)
+      val data = new HashMap[String, AnyRef]
+      data += "name" -> "Jonas"
+      val pong = new PongActor with CountDown
+      val ping = new PingActor(pong)
+      launch[PingPongClient] using (data, pong, ping)
+      val received = latch.await(4, TimeUnit.SECONDS)
+      received should be(true)
+    }
     it("should run actors sucessfully") {
-        val data:Map[String,Object] = new HashMap
-        data += "name"->"Jonas"
-        launch[PingPongClient] using (data,PingActor,PongActor)        
+      latch = new CountDownLatch(2)
+      var request = mock(classOf[HttpServletRequest])
+      var response = mock(classOf[HttpServletResponse])
+      when(request.getParameter("name")).thenReturn("Jonas")
+      var dispatch = new DispatchMock
+      val servlet = new ExampleServlet(dispatch) with CountDownActors
+      servlet.doGet(request, response)
+      val received = latch.await(4, TimeUnit.SECONDS)
+      received should be(true)
     }
-    }
+
+
+  }
 }

@@ -21,7 +21,7 @@ trait Dispatch {
 trait ActorDispatch {
   def launch[T <: ActorClient](implicit m: Manifest[T]) = new ActorHolder(m)
 }
-
+object ActorDispatch extends ActorDispatch
 
 
 class ActorHolder[T](m: Manifest[T]) {

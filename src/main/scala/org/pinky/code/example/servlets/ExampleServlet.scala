@@ -6,39 +6,41 @@ import com.google.inject._
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
 import se.scalablesolutions.akka.actor.Actor
 import org.pinky.code.extension.controlstructure.{ActorClient, ActorDispatch, Dispatch}
-import se.scalablesolutions.akka.config.ScalaConfig._
 
-trait PingActor extends Actor {
+class PingActor(pong:Actor) extends Actor {
   def receive = {
     case "Jonas" => {
-      PongActor ! "whatsnext"
+      pong ! "whatsnext"
     }
     case "yay" => {
       println("replay from Pong")
       stop
     }
-    case _ => println("received unknown message")
+    case _ => println("unknown message was received")
   }
 }
-object PingActor extends PingActor
-
-trait PongActor extends Actor {
+class PongActor extends Actor {
   def receive = {
     case "whatsnext" => {
       println("pong")
       reply("yay")
       stop
     }
+    case _ => println("unknown message was received")  
   }
 }
-object PongActor extends PongActor
+
+trait Actors {
+   val pongActor = new PongActor
+   val pingActor = new PingActor(pongActor)
+}
 
 class PingPongClient(reqData: Map[String, AnyRef], actors: Actor*) extends ActorClient(reqData, actors:_*) {
-  lifeCycle = Some(LifeCycle(Permanent))
   fireStarter {
-    PingActor ! reqData("name")
+    actors(0) ! reqData("name")
   }
 }
+
 
 /**
  * A regular controller(serlvet) example
@@ -47,13 +49,13 @@ class PingPongClient(reqData: Map[String, AnyRef], actors: Actor*) extends Actor
  */
 
 @Singleton
-class ExampleServlet @Inject()(dispatch: Dispatch) extends HttpServlet with ActorDispatch {
+class ExampleServlet @Inject()(dispatch: Dispatch) extends HttpServlet with ActorDispatch with Actors{
+
   override def doGet(req: HttpServletRequest, res: HttpServletResponse) = {
     dispatch.call(req, res) {
       val data = new HashMap[String, AnyRef]
-      //val params = captureIn(req,'name,'id)
       data += "name" -> req.getParameter("name")
-      launch[PingPongClient] using (data, PingActor, PongActor)
+      launch[PingPongClient] using (data, pingActor, pongActor)
     }
   }
 
