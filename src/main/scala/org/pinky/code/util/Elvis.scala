@@ -6,7 +6,7 @@ package org.pinky.code.util
  * wrap chained and null method calls into an Option type
  * after importing this
  * <pre>
- * val whatsthis = ?(method.a.b.c) match  { case Some(s) =>s;case None=>"boooo" }
+ * val whatsthis = ?(method.a.b.c) match   { case Some(s) =>s;case None=>"boooo" }
  * </pre>
  */
 object Elvis {

@@ -42,7 +42,7 @@ class PinkyServletContextListenerTest extends Spec with ShouldMatchers {
       }
       f.modules = Array(new ServletModule() {})
       val i = f.getInjectorPublic
-      i.getClass.getName should equal("com.google.inject.internal.InjectorImpl")
+      i.getClass.getName should equal("com.google.inject.InjectorImpl")
     }
   }
 }

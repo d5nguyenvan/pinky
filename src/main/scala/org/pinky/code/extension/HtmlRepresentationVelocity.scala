@@ -16,7 +16,7 @@ import java.io.{BufferedWriter, OutputStreamWriter, OutputStream}
 class HtmlRepresentationVelocity @Inject()(ctx: ServletContext) extends Representation {
   val engine = new VelocityEngine()
   engine.setProperty("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.JdkLogChute")
-  engine.setProperty("file.resource.loader.path", ctx.getRealPath("/") + "template")
+  engine.setProperty("file.resource.loader.path", ctx.getRealPath("/") + "/template")
   // Initialize the engine
   engine.init()
 
@@ -40,7 +40,13 @@ class HtmlRepresentationVelocity @Inject()(ctx: ServletContext) extends Represen
       // Process the template
       template.merge(context, tmplWriter);
       tmplWriter.flush();
-    } catch {case e: Exception => {e.printStackTrace; throw e}}
+    } catch {
+      case e: Exception => {
+        println("TEMPLATE DIR:"+engine.getProperty("file.resource.loader.path"))
+        e.printStackTrace;
+        throw e
+      }
+    }
 
   }
 

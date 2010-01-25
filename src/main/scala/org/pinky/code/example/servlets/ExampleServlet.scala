@@ -4,19 +4,18 @@ import scala.collection.jcl.HashMap
 import scala.collection.jcl.Map
 import com.google.inject._
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
-import se.scalablesolutions.akka.actor.Actor
-import org.pinky.code.extension.controlstructure.{ActorClient, ActorDispatch, Dispatch}
+import se.scalablesolutions.akka.actor.{ Actor}
+import org.pinky.code.extension.controlstructure.{ ActorClient, Dispatch}
 
-class PingActor(pong:Actor) extends Actor {
+class PingActor(pong: Actor) extends Actor {
   def receive = {
     case "Jonas" => {
       pong ! "whatsnext"
     }
     case "yay" => {
       println("replay from Pong")
-      stop
     }
-    case _ => println("unknown message was received")
+    case _ => println("Ping:unknown message was received")
   }
 }
 class PongActor extends Actor {
@@ -24,20 +23,20 @@ class PongActor extends Actor {
     case "whatsnext" => {
       println("pong")
       reply("yay")
-      stop
     }
-    case _ => println("unknown message was received")  
+    case _ => println("Pong:unknown message was received")
   }
 }
 
-trait Actors {
-   val pongActor = new PongActor
-   val pingActor = new PingActor(pongActor)
+trait Workers {
+  this: ActorClient=>
+  private val pongActor = new PongActor
+  workers = Array(new PingActor(pongActor), pongActor)
 }
 
-class PingPongClient(reqData: Map[String, AnyRef], actors: Actor*) extends ActorClient(reqData, actors:_*) {
-  fireStarter {
-    actors(0) ! reqData("name")
+class PingPongClient extends ActorClient with Workers {
+  def callback(reqData: Map[String, AnyRef]) {
+    workers(0) ! reqData("name")
   }
 }
 
@@ -49,20 +48,19 @@ class PingPongClient(reqData: Map[String, AnyRef], actors: Actor*) extends Actor
  */
 
 @Singleton
-class ExampleServlet @Inject()(dispatch: Dispatch) extends HttpServlet with ActorDispatch with Actors{
-
-  override def doGet(req: HttpServletRequest, res: HttpServletResponse) = {
-    dispatch.call(req, res) {
+class ExampleServlet @Inject()(dispatch: Dispatch, actorClient:ActorClient) extends HttpServlet   {
+  override def doGet(request: HttpServletRequest, response: HttpServletResponse) = {
+    dispatch.call(request, response) {
       val data = new HashMap[String, AnyRef]
-      data += "name" -> req.getParameter("name")
-      launch[PingPongClient] using (data, pingActor, pongActor)
+      data += "name" -> (if (request.getParameter("name") == null) "default" else  request.getParameter("name"))
+      actorClient.fireStarter(data)
     }
   }
 
-  override def doPost(req: HttpServletRequest, res: HttpServletResponse) = {
-    dispatch.call(req, res) {
+  override def doPost(request: HttpServletRequest, response: HttpServletResponse) = {
+    dispatch.call(request, response) {
       val data = new HashMap[String, AnyRef]
-      data += "message" -> "Changing state with POST"
+      data += "name" -> "Changing state with POST"
       data
     }
 

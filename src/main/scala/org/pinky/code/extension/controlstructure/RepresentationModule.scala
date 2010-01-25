@@ -2,6 +2,7 @@ package org.pinky.code.extension.controlstructure
 
 import com.google.inject.AbstractModule
 import com.google.inject.name.Names._
+import org.pinky.code.extension._
 
 /**
  * Provides basic representations, the easiest way to extend this if you provide your own module

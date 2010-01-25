@@ -10,7 +10,7 @@ import org.pinky.code.extension.Representations
 /**
  * for the following call
  * <pre>
- *  dispatch.call(req, res) {
+ *  dispatch.call(req, res)  {
  *       val data = new HashMap[String, AnyRef]
  *       data += "message" -> "Hello World"
  *       data

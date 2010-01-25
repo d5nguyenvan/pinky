@@ -1,6 +1,6 @@
 <html>
 <body>
 <h1>Velocity</h1>
-${message}
+${name}
 </body>
 </html>

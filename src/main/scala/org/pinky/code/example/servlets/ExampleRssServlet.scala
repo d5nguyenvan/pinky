@@ -3,11 +3,11 @@ package org.pinky.code.example.servlets
 
 import _root_.javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
 import _root_.scala.collection.jcl.{HashMap, ArrayList}
-import extension.{RssItem, RssHeader}
 import com.google.inject._
-import extension.controlstructure.Dispatch
 import java.util.Date
 import java.text.DateFormat
+import org.pinky.code.extension.{RssItem, RssHeader}
+import org.pinky.code.extension.controlstructure.Dispatch
 
 /**
  * An rss controller(serlvet) exmaple

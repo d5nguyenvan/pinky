@@ -2,8 +2,10 @@ package org.pinky.code.example
 
 
 import com.google.inject.servlet.ServletModule
-import servlets.{ExampleFilter, ExampleRssServlet, ExampleServlet}
-import org.pinky.code.extension.controlstructure.{RepresentationModule, PinkyServletContextListener}
+import com.google.inject.AbstractModule
+import org.pinky.code.extension.controlstructure.{ActorClient, RepresentationModule, PinkyServletContextListener}
+import servlets._
+import org.pinky.code.extension.comet.CometServlet
 
 /**
  * Listener example which demonstrates how to configure guice managed filters, servlets and other components the "pinky way"
@@ -16,13 +18,15 @@ class ExampleListener extends PinkyServletContextListener
 {
   modules = Array(
     new RepresentationModule(),
+    new AbstractModule() {
+      def configure() = {
+        bind(classOf[ActorClient]).to(classOf[PingPongClient])
+      }
+    },
     new ServletModule() {
-
-      // Imports the DSL fixes for scala
-      // Note how we can import it in
-      //    the precise scope it's gonna be used
       filter("/hello/*").through(classOf[ExampleFilter])
       serve("*.rss").by(classOf[ExampleRssServlet])
+      serve("/comet").by(classOf[CometServlet])
       serve("/hello/*").by(classOf[ExampleServlet])
     }
 
