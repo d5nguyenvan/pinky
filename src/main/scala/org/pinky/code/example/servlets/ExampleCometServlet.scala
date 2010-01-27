@@ -21,7 +21,7 @@ class MyActorCometClient(continuation: Continuation, request: HttpServletRequest
             extends ActorCometClient(continuation,request) {
     val url = new URL("http://twitter.com/statuses/user_timeline/5047741.rss")
     override def receive = handler {
-      case "callfeed" => {
+      case "readfeed" => {
         val stuff = for (line <- (XML.loadString(fromInputStream(url.openStream).getLines.mkString) \\ "title")) yield line.text
         writer(continuation).println(stuff.mkString("<br>"))
       }
@@ -29,7 +29,7 @@ class MyActorCometClient(continuation: Continuation, request: HttpServletRequest
     def callback = {
       println("about to hit callback")
       Thread.sleep(2000)
-      this ! "callfeed"
+      this ! "readfeed"
       println("about to hit second sleep")
       Thread.sleep(3000)
       this ! Resume
