@@ -2,10 +2,11 @@ package org.pinky.code.example
 
 
 import com.google.inject.servlet.ServletModule
-import com.google.inject.AbstractModule
 import org.pinky.code.extension.controlstructure.{ActorClient, RepresentationModule, PinkyServletContextListener}
 import servlets._
 import org.pinky.code.extension.comet.CometServlet
+import org.eclipse.jetty.continuation.ContinuationFilter
+import com.google.inject.{Scopes, AbstractModule}
 
 /**
  * Listener example which demonstrates how to configure guice managed filters, servlets and other components the "pinky way"
@@ -21,12 +22,14 @@ class ExampleListener extends PinkyServletContextListener
     new AbstractModule() {
       def configure() = {
         bind(classOf[ActorClient]).to(classOf[PingPongClient])
+        bind(classOf[ContinuationFilter]).in(Scopes.SINGLETON)
       }
     },
     new ServletModule() {
       filter("/hello/*").through(classOf[ExampleFilter])
+      filter("/comet*").through(classOf[ContinuationFilter])
+      serve("/comet*").by(classOf[ExampleCometServlet])
       serve("*.rss").by(classOf[ExampleRssServlet])
-      serve("/comet").by(classOf[CometServlet])
       serve("/hello/*").by(classOf[ExampleServlet])
     }
 

@@ -5,8 +5,10 @@ import org.pinky.code.annotation.Every
 import java.util.regex.Pattern
 import java.util.concurrent.{TimeUnit, ThreadPoolExecutor, ScheduledThreadPoolExecutor}
 import javax.servlet.http.{HttpServletResponse, HttpServlet, HttpServletRequest}
-import org.atmosphere.cpr.Meteor
-import se.scalablesolutions.akka.actor.{ActorRegistry, Actor}
+import se.scalablesolutions.akka.actor.Actor
+import javax.servlet.ServletResponse
+import java.io.PrintWriter
+import org.eclipse.jetty.continuation.Continuation
 
 case object UnSchedule
 case object Stop
@@ -93,21 +95,9 @@ trait ActorClient extends Client {
 
 
 case object Resume
-case class MeteorHolder(meteor: Meteor)
-/*
-class Comet(meteor: Meteor, request: HttpServletRequest, response: HttpServletResponse) extends ActorCometClient (meteor, request, response) {
- def receive = handler {
-    case "test" =>
- }
-   def callback = {
-        this !! "test"
-   }
-}
 
- */
-abstract class ActorCometClient(meteor: Meteor, request: HttpServletRequest, response: HttpServletResponse,actors: Actor*) extends Client {
-  def this(meteor: Meteor, request: HttpServletRequest, response: HttpServletResponse) = this (meteor, request, response,null)
-  workers = actors
+abstract class ActorCometClient(continuation:Continuation, request: HttpServletRequest) extends Client {
+  
   if (workers != null) for (actor <- workers if !actor.isRunning) startLink(actor)
 
   def callback
@@ -115,15 +105,17 @@ abstract class ActorCometClient(meteor: Meteor, request: HttpServletRequest, res
   def handler(messageHandler: PartialFunction[Any, Unit]): PartialFunction[Any, Unit] = {
     val resumeHandler: PartialFunction[Any, Unit] = {
       case Resume => {
+        val out = continuation.getServletResponse.getWriter
+        out.flush()
+        out.close()
         shutdown
-        if (workers != null) workers.foreach(unlink(_))
-        meteor.resume()
+        continuation.complete()
       }
     }
-    messageHandler orElse super.receive orElse resumeHandler
+     resumeHandler orElse  messageHandler orElse super.receive 
   }
 
-
+  def writer(continuation:Continuation):PrintWriter = continuation.getServletResponse.getWriter
 }
 
 

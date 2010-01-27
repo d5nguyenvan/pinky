@@ -1,6 +1,6 @@
 import sbt._
 
-class PinkyProject(info: ProjectInfo) extends DefaultWebProject(info) {
+class PinkyProject(info: ProjectInfo) extends DefaultProject(info) {
     val guiceyfruit = "GuiceyFruit" at "http://guiceyfruit.googlecode.com/svn/repo/releases/"
     val databinder = "DataBinder" at "http://databinder.net/repo"
     val configgy = "Configgy" at "http://www.lag.net/repo"
@@ -8,11 +8,10 @@ class PinkyProject(info: ProjectInfo) extends DefaultWebProject(info) {
     val jBoss = "jBoss" at "http://repository.jboss.org/maven2"
     val akka_repo = "Akka Maven Repository" at "http://scalablesolutions.se/akka/repository"
     val guiceMaven = "guice maven repository" at "http://guice-maven.googlecode.com/svn/trunk"
-    val atmosphere = "atmosphere repo" at "http://download.java.net/maven/2"
+    val jetty_repo = "jetty repository" at "http://oss.sonatype.org/content/groups/jetty"
     
-    val atmoshpere = "org.atmosphere" % "atmosphere-jersey" % "0.5" % "compile" 
     val akka = "se.scalablesolutions.akka" % "akka-core" % "0.6" % "compile"
-    //val jettyComet = "org.mortbay.jetty" % "jetty-util" % "6.1.22" % "compile" 
+    val jettyComet = "org.eclipse.jetty" % "jetty-continuation" % "7.0.2-SNAPSHOT" % "compile" 
 
     val guice = "com.google.code.guice" % "guice" % "2.0.1" % "compile" 
     val guiceServlet = "com.google.code.guice" % "guice-servlet" % "2.0.1" % "compile" 
