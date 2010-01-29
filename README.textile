@@ -17,8 +17,8 @@ h3. Features
 * scheduler for akka jobs
 * comet integration (based on "jetty7 continuation":http://wiki.eclipse.org/Jetty/Feature/Continuations , note it does not require a jetty container though)
 ** Controllers are plain old servlets
-* form validator
-* regex named group capturing in url mappings
+* Form validator and generator
+* Named regex group capturing in url mappings
 * Filters are implemented as plain old filters
 * Filters/Servlet creation and mapping are managed by Guice
 * Out of the box support for REST via managed servlets
