@@ -9,6 +9,7 @@ import org.pinky.code.extension.controlstructure.{Resume, ActorCometClient}
 import org.eclipse.jetty.continuation.Continuation
 import scala.xml._
 import org.apache.commons.io.IOUtils
+import org.pinky.code.util.ARM.using
 
 /**
  * Created by IntelliJ IDEA.
@@ -23,11 +24,10 @@ class MyActorCometClient(continuation: Continuation, request: HttpServletRequest
   val url = new URL("http://twitter.com/statuses/user_timeline/5047741.rss")
   override def receive = handler {
     case "readfeed" => {
-      val  in = url.openStream
-      try {
+      for (in <- using(url.openStream)) {
         val stuff = for (line <- (XML.loadString(IOUtils.toString(in)) \\ "title")) yield line.text
         writer(continuation).println(stuff.mkString("<br>"))
-      } finally {IOUtils.closeQuietly(in)}
+      }
     }
   }
 

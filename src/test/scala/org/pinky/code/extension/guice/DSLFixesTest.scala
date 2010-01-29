@@ -32,7 +32,7 @@ class DSLFixesTest extends Spec with ShouldMatchers {
       });
 
       val i = f.getInjectorPublic
-      i.getClass.getName should equal("com.google.inject.InjectorImpl")
+      i.getClass.getName should equal("com.google.inject.internal.InjectorImpl")
 
 
     }
@@ -56,7 +56,7 @@ class DSLFixesTest extends Spec with ShouldMatchers {
       });
 
       val i = f.getInjectorPublic
-      i.getClass.getName should equal("com.google.inject.InjectorImpl")
+      i.getClass.getName should equal("com.google.inject.internal.InjectorImpl")
 
     }
 
@@ -78,7 +78,7 @@ class DSLFixesTest extends Spec with ShouldMatchers {
       });
 
       val i = f.getInjectorPublic
-      i.getClass.getName should equal("com.google.inject.InjectorImpl")
+      i.getClass.getName should equal("com.google.inject.internal.InjectorImpl")
 
 
     }
@@ -102,7 +102,7 @@ class DSLFixesTest extends Spec with ShouldMatchers {
       });
 
       val i = f.getInjectorPublic
-      i.getClass.getName should equal("com.google.inject.InjectorImpl")
+      i.getClass.getName should equal("com.google.inject.internal.InjectorImpl")
 
     }
 

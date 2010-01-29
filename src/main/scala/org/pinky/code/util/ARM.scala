@@ -16,7 +16,7 @@ package org.pinky.code.util
  * }
  * </pre>
  */
-object ARM {
+trait ARM {
   /**
    * @resource the reasource that needs to be wrapped around
    */
@@ -32,3 +32,4 @@ object ARM {
       }
   }
 }
+object ARM extends ARM
