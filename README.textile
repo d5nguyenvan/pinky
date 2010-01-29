@@ -31,4 +31,4 @@ h3. Features
 * new API to deal with jdbc
 * support for form generation and validation
 
-"more information:"http://wiki.github.com/pk11/pinky/
+"more information":http://wiki.github.com/pk11/pinky/
