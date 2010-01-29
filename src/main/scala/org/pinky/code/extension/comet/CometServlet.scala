@@ -40,12 +40,9 @@ abstract class CometServlet[T <: ActorCometClient] extends HttpServlet {
         out.close()
       }
       if (continuation.isInitial) {
-        println("about to suspend")
         continuation.suspend(response)
-        println("suspended")
         out.flush()
         val cometClient = createInstanceOfActorCometClient(continuation, request)
-        println("try to start it")
         cometClient.fireStarter(cometClient.callback)
       }
     }

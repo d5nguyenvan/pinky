@@ -1,13 +1,12 @@
 import sbt._
 
 class PinkyProject(info: ProjectInfo) extends DefaultProject(info) {
-    val guiceyfruit = "GuiceyFruit" at "http://guiceyfruit.googlecode.com/svn/repo/releases/"
-    val databinder = "DataBinder" at "http://databinder.net/repo"
-    val configgy = "Configgy" at "http://www.lag.net/repo"
-    val multiverse = "Multiverse" at "http://multiverse.googlecode.com/svn/maven-repository/releases"
-    val jBoss = "jBoss" at "http://repository.jboss.org/maven2"
-    val akka_repo = "Akka Maven Repository" at "http://scalablesolutions.se/akka/repository"
     val guiceMaven = "guice maven repository" at "http://guice-maven.googlecode.com/svn/trunk"
+    
+    val akka_databinder = "DataBinder" at "http://databinder.net/repo"
+    val akka_configgy = "Configgy" at "http://www.lag.net/repo"
+    val akka_multiverse = "Multiverse" at "http://multiverse.googlecode.com/svn/maven-repository/releases"
+    val akka_jBoss = "jBoss" at "http://repository.jboss.org/maven2"
     val jetty_repo = "jetty repository" at "http://oss.sonatype.org/content/groups/jetty"
 
     val akka = "se.scalablesolutions.akka" % "akka-core" % "0.6" % "compile"
