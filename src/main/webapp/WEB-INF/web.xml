@@ -6,7 +6,7 @@
     <display-name>Pinky</display-name>
 
     <listener>
-        <listener-class>org.pinky.code.example.ExampleListener</listener-class>
+        <listener-class>org.pinky.example.ExampleListener</listener-class>
     </listener>
 
     <filter>
