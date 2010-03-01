@@ -3,6 +3,7 @@ import sbt._
 class PinkyProject(info: ProjectInfo) extends DefaultProject(info) {
     val guiceMaven = "guice maven repository" at "http://guice-maven.googlecode.com/svn/trunk"
     
+    val akka_repo = "akka maven repository" at "http://scalablesolutions.se/akka/repository"
     val akka_databinder = "DataBinder" at "http://databinder.net/repo"
     val akka_configgy = "Configgy" at "http://www.lag.net/repo"
     val akka_multiverse = "Multiverse" at "http://multiverse.googlecode.com/svn/maven-repository/releases"
