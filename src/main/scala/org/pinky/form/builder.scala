@@ -8,8 +8,7 @@ import org.pinky.annotation.form._
 import net.sf.oval.constraint.Length
 import net.sf.oval.ConstraintViolation
 import org.pinky.validator.{CustomOvalValidator}
-import collection.jcl.Conversions._
-
+import collection.JavaConversions._
 /**
  * defines default behaviour for prepopulating and rendering forms
  */
@@ -230,7 +229,7 @@ trait UlTagBuilder extends Form with Builder with Default {
  */
 trait Validator {
   import java.util.{List => JList, Map => JMap, HashMap, ArrayList}
-  import collection.jcl.Conversions._
+  import collection.JavaConversions._
 
   /**
    *

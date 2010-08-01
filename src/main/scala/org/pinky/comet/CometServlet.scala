@@ -1,13 +1,9 @@
 package org.pinky.comet
 
 import javax.servlet.http.{HttpServlet, HttpServletRequest, HttpServletResponse}
-import java.util.LinkedList
-import org.pinky.controlstructure.ActorCometClient
-import se.scalablesolutions.akka.actor.Actor
-import reflect.Manifest
-import javax.servlet.{ServletException, ServletConfig}
 import org.eclipse.jetty.continuation.{ContinuationSupport, Continuation}
 import java.lang.reflect.ParameterizedType
+import org.pinky.core.ActorCometClient
 
 
 /**
@@ -19,10 +15,10 @@ import java.lang.reflect.ParameterizedType
  */
 
 abstract class CometServlet[T <: ActorCometClient] extends HttpServlet {
-    private def clazz = {
-      val superType = getClass.getGenericSuperclass.asInstanceOf[ParameterizedType]
-      superType.getActualTypeArguments()(0).asInstanceOf[Class[_]]
-    }
+  private def clazz = {
+    val superType = getClass.getGenericSuperclass.asInstanceOf[ParameterizedType]
+    superType.getActualTypeArguments()(0).asInstanceOf[Class[_]]
+  }
 
   override def service(request: HttpServletRequest, response: HttpServletResponse) = {
     if (clazz == null) {

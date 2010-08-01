@@ -2,7 +2,6 @@ package org.pinky.comet
 
 import org.scalatest.Spec
 import org.scalatest.matchers.ShouldMatchers
-import org.pinky.controlstructure.ActorCometClient
 
 /**
  * Created by IntelliJ IDEA.

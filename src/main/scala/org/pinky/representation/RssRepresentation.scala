@@ -2,7 +2,6 @@ package org.pinky.representation
 
 import java.io.{BufferedWriter, OutputStreamWriter, OutputStream}
 
-import scala.collection.jcl.Map
 
 /**
  * Provides an RSS 2.0 representation using Scala's XML support,
@@ -11,8 +10,8 @@ import scala.collection.jcl.Map
  * @author peter hausel gmail com (Peter Hausel)
  */
 class RssRepresentation extends Representation {
-  def write(data: Map[String, AnyRef], out: OutputStream) = {
-    data.removeKey("template")
+  def write(rawdata: Map[String, AnyRef], out: OutputStream) = {
+    val data = rawdata - ("template")
     val outWriter = new BufferedWriter(new OutputStreamWriter(out))
     outWriter.write(rssTemplate(data))
     outWriter.close
@@ -40,11 +39,15 @@ class RssRepresentation extends Representation {
        </rss>"""
 
     val headerRss =
-    <title>{header.title}</title>
+    <title>
+      {header.title}
+    </title>
             <link>
               {header.link}
             </link>
-            <description>{header.description}</description>
+            <description>
+              {header.description}
+            </description>
             <language>
               {header.language}
             </language>
@@ -85,7 +88,9 @@ class RssRepresentation extends Representation {
         <pubDate>
           {item.itempubdate}
         </pubDate>
-        <guid>{item.itemguid}</guid>
+        <guid>
+          {item.itemguid}
+        </guid>
       </item>;
       ret.append(xmlItem.toString)
     }

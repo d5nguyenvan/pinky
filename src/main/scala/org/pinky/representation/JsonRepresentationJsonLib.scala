@@ -2,13 +2,12 @@ package org.pinky.representation
 
 import java.io.{BufferedWriter, OutputStreamWriter, OutputStream}
 import org.json.JSONObject
-import scala.collection.jcl._
 
 class JsonRepresentationJsonLib extends Representation {
-  def write(data: Map[String, AnyRef], out: OutputStream) = {
-    data.removeKey("template")
+  def write(rawdata: Map[String, AnyRef], out: OutputStream) = {
+    val data = rawdata - ("template")
     val outWriter = new BufferedWriter(new OutputStreamWriter(out))
-    outWriter.write((new JSONObject(data.asInstanceOf[MapWrapper[String, AnyRef]].underlying)).toString)
+    outWriter.write((new JSONObject(data)).toString)
     outWriter.close
 
   }

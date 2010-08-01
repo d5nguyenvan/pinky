@@ -1,7 +1,5 @@
-package org.pinky.controlstructure
+package org.pinky.guice
 
-
-import _root_.scala.collection.jcl.ArrayList
 import com.google.inject.Injector
 import com.google.inject.servlet.GuiceServletContextListener
 import com.google.inject.Module
@@ -14,6 +12,7 @@ import com.google.inject.Guice
  * @author peter hausel gmail com (Peter Hausel)
  */
 abstract class PinkyServletContextListener extends GuiceServletContextListener {
+  
   var modules: Array[Module] = _
 
 

@@ -4,12 +4,12 @@ import org.pinky.comet.CometServlet
 import javax.servlet.http.HttpServletRequest
 import com.google.inject._
 import java.net.URL
-import scala.io.Source.fromInputStream
-import org.pinky.controlstructure.{Resume, ActorCometClient}
+import scala.io.Source
 import org.eclipse.jetty.continuation.Continuation
 import scala.xml._
-import org.apache.commons.io.IOUtils
 import org.pinky.util.ARM.using
+import org.pinky.actor.Resume
+import org.pinky.core.ActorCometClient
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,10 +22,11 @@ import org.pinky.util.ARM.using
 class MyActorCometClient(continuation: Continuation, request: HttpServletRequest)
         extends ActorCometClient(continuation, request) {
   val url = new URL("http://twitter.com/statuses/user_timeline/5047741.rss")
+
   override def receive = handler {
     case "readfeed" => {
-      for (in <- using(url.openStream)) {
-        val stuff = for (line <- (XML.loadString(IOUtils.toString(in)) \\ "title")) yield line.text
+      for (line <- Source.fromInputStream(url.openStream).getLines) {
+        val stuff = for (title <- (XML.loadString((line)) \\ "title")) yield title.text
         writer(continuation).println(stuff.mkString("<br>"))
       }
     }
@@ -34,10 +35,10 @@ class MyActorCometClient(continuation: Continuation, request: HttpServletRequest
   def callback = {
     println("about to hit callback")
     Thread.sleep(1000)
-    this ! "readfeed"
+    thisRef ! "readfeed"
     println("about to hit second sleep")
     Thread.sleep(1000)
-    this ! Resume
+    thisRef ! Resume
   }
 }
 @Singleton class ExampleCometServlet extends CometServlet[MyActorCometClient]

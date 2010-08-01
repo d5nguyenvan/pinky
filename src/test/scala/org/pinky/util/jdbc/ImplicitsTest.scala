@@ -10,7 +10,7 @@ import DriverManager.{getConnection => connect}
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.Spec
 import org.pinky.util.ARM.using
-import org.pinky.util.jdbc.Predef._
+import org.pinky.util.jdbc.Implicits._
 
 
 /**
@@ -21,7 +21,7 @@ import org.pinky.util.jdbc.Predef._
  * To change this template use File | Settings | File Templates.
  */
 
-class PredefTest extends Spec with ShouldMatchers {
+class ImplicitsTest extends Spec with ShouldMatchers {
 
      describe("a jdbc utility") {
        it ("should create connection a table and query from table using a prepared statement") {
@@ -43,11 +43,11 @@ class PredefTest extends Spec with ShouldMatchers {
               ret.foreach( row => {row("name") should equal("john") } )
               conn execute("insert into person(tp, name) values(?, ?)",2,"peter")
               val ret2 = conn.query("SELECT * FROM PERSON WHERE ID=?", 2)
-              ret2.toArray(0)("name") should equal("peter")
+              ret2.toList(0)("name") should equal("peter")
               val selectStatement = conn.prepareStatement("SELECT * FROM PERSON WHERE ID=?")
               selectStatement << 2
-              val autoCastID:Long = selectStatement.query.toArray(0)("id")
-              selectStatement.query.toArray(0)("name") should equal("peter")
+              val autoCastID:Long = selectStatement.query.toList(0)("id")
+              selectStatement.query.toList(0)("name") should equal("peter")
               autoCastID should equal(2)
               val people = conn.queryFor[Person]("SELECT * FROM PERSON")
               people.size should be (2)

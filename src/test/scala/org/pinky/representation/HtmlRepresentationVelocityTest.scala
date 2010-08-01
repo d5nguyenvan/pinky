@@ -1,7 +1,6 @@
 package org.pinky.representation
 
 import _root_.javax.servlet.ServletContext
-import _root_.scala.collection.jcl.HashMap
 import java.io.{File, OutputStream}
 import org.mockito.Mockito._
 import org.scalatest.Spec
@@ -25,7 +24,7 @@ class HtmlRepresentationVelocityTest extends Spec with ShouldMatchers {
         when(ctx.getRealPath("/")).thenReturn(new File(".").getCanonicalPath + "/")
         val representation = new HtmlRepresentationVelocity(ctx)
         val out = mock(classOf[OutputStream])
-        val data = new HashMap[String, AnyRef]()
+        val data = Map[String, AnyRef]()
         representation.write(data, out)
       } catch {
         case ex: NoSuchElementException => exceptionIsThrown = true
@@ -40,8 +39,7 @@ class HtmlRepresentationVelocityTest extends Spec with ShouldMatchers {
         when(ctx.getRealPath("/")).thenReturn(new File(".").getCanonicalPath + "/")
         val representation = new HtmlRepresentationVelocity(ctx)
         val out = mock(classOf[OutputStream])
-        val data = new HashMap[String, AnyRef]
-        data += "template" -> "/hello/index11.html"
+        val data = Map( "template" -> "/hello/index11.html")
         representation.write(data, out)
       } catch {
         case ex: org.apache.velocity.exception.ResourceNotFoundException => exceptionIsThrown = true
@@ -56,9 +54,7 @@ class HtmlRepresentationVelocityTest extends Spec with ShouldMatchers {
       when(ctx.getRealPath("/")).thenReturn(path)
       val representation = new HtmlRepresentationVelocity(ctx)
       val out = mock(classOf[OutputStream])
-      val data = new HashMap[String, AnyRef]
-      data += "template" -> "/hello/index.html"
-      data += "message" -> "hello world"
+      val data = Map("template" -> "/hello/index.html","message" -> "hello world")
       representation.write(data, out)
       verify(out).flush()
     }

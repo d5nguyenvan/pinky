@@ -10,13 +10,13 @@ import collection.mutable.{Map, ListBuffer}
  * this class should provide an easier way to access jdbc
  * using prepared statements:
  * <pre>
- * for (conn &lt;- using (connect("jdbc:h2:mem:", "sa", "")))   {
+ * for (conn &lt;- using (connect("jdbc:h2:mem:", "sa", "")))    {
  *   conn execute "CREATE TABLE...."
  *   val insertPerson = conn prepareStatement "insert into person(type, name) values(?, ?)"
  *   insertPerson  &lt;&lt; 1 &lt;&lt; "john" execute
  *   <br>
  *   val ret = conn.query("SELECT * FROM PERSON WHERE ID=?",1)
- *   ret.foreach( row =&gt;   { row("NAME") should equal("john") } )
+ *   ret.foreach( row =&gt;    { row("NAME") should equal("john") } )
  *   conn execute("insert into person(type, name) values(?, ?)",2,"peter")
  *   <br>
  *   val ret2 = conn.query("SELECT * FROM PERSON WHERE ID=?", 2)
@@ -30,7 +30,7 @@ import collection.mutable.{Map, ListBuffer}
  * </pre>
  *
  */
-object Predef {
+object Implicits {
   implicit def anyRef2Boolean(a: AnyRef): Boolean = a.asInstanceOf[Boolean];
 
   implicit def anyRef2Byte(a: AnyRef): Byte = a.asInstanceOf[Byte];
@@ -154,7 +154,7 @@ object Predef {
   class RichStatement(val s: Statement) {
     def execute(sql: String): Unit = {s.execute(sql); this}
 
-    def execute(sql: Seq[String]): Unit = {for (val x <- sql) s.execute(x); this}
+    def execute(sql: Seq[String]): Unit = {for (x <- sql) s.execute(x); this}
   }
 
 

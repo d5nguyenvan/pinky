@@ -1,9 +1,8 @@
-package org.pinky.controlstructure
+package org.pinky.core
 
 
 import org.mockito.Mockito._
 import org.scalatest.matchers.ShouldMatchers
-import _root_.scala.collection.jcl._
 import _root_.javax.servlet.http.{HttpServletResponse, HttpServletRequest}
 import org.pinky.representation.{Representation, Representations}
 import org.scalatest.Spec
@@ -18,7 +17,7 @@ import org.scalatest.Spec
  */
 
 
-class DispatchTest extends Spec with ShouldMatchers {
+class DispatcherTest extends Spec with ShouldMatchers {
   var out: javax.servlet.ServletOutputStream = _
   var representation: Representations = _
   var request: HttpServletRequest = _
@@ -48,11 +47,9 @@ class DispatchTest extends Spec with ShouldMatchers {
       when(request.getRequestURI).thenReturn("/hello/index.kvv")
       when(response.getOutputStream).thenReturn(out)
       //now run the actual test
-      val control = new DefaultControl(representation)
+      val control = new Dispatcher(representation)
       control.call(request, response) {
-        val data = new HashMap[String, AnyRef]()
-        data += "message" -> "hello world"
-        data
+        Map( "message" -> "hello world")
       }
       verify(response).setStatus(500)
 
@@ -70,15 +67,11 @@ class DispatchTest extends Spec with ShouldMatchers {
       when(request.getRequestURI).thenReturn("/hello/index")
       when(response.getOutputStream).thenReturn(out)
       //now run the actual test
-      val control = new DefaultControl(representation)
+      val control = new Dispatcher(representation)
       control.call(request, response) {
-        val data = new HashMap[String, AnyRef]()
-        data += "message" -> "hello world"
-        data
+       Map("message" -> "hello world")
       }
-      val assumed = new HashMap[String, AnyRef]()
-      assumed += "message" -> "hello world"
-      assumed += "template" -> "/hello/index"
+      val assumed = Map("message" -> "hello world","template" -> "/hello/index")
       verify(response).setContentType("text/html")
       verify(response, never).setStatus(500)
       verify(concreteRepresentation).write(assumed, out)
@@ -97,14 +90,11 @@ class DispatchTest extends Spec with ShouldMatchers {
       when(request.getRequestURI).thenReturn("/hello/index.rss")
       when(response.getOutputStream).thenReturn(out)
       //now run the actual test
-      val control = new DefaultControl(representation)
+      val control = new Dispatcher(representation)
       control.call(request, response) {
-        val data = new HashMap[String, AnyRef]()
-        data += "message" -> "hello world"
-        data
+        Map( "message" -> "hello world")
       }
-      val assumed = new HashMap[String, AnyRef]()
-      assumed += "message" -> "hello world"
+      val assumed = Map("message" -> "hello world")
       verify(response).setContentType("text/rss")
       verify(response, never).setStatus(500)
       verify(concreteRepresentation).write(assumed, out)

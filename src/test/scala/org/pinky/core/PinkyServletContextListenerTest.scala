@@ -1,9 +1,10 @@
-package org.pinky.controlstructure
+package org.pinky.core
 
 import com.google.inject.servlet.ServletModule
 import com.google.inject.Injector
 import org.scalatest.Spec
 import org.scalatest.matchers.ShouldMatchers
+import org.pinky.guice.PinkyServletContextListener
 
 /**
  * Created by IntelliJ IDEA.

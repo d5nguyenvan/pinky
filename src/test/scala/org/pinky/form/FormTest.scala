@@ -26,10 +26,10 @@ class FormTest extends Spec with ShouldMatchers {
     @RadioButton
     var radioButton: Map[String, Boolean] = _
 
-    @Length {val max = 20}
+    @Length(max = 20)
     var firstName: String = _
 
-    @Length {val max = 20}
+    @Length (max = 20)
     var lastName: String = _
   }
 
@@ -37,38 +37,36 @@ class FormTest extends Spec with ShouldMatchers {
     @RadioButton
     var radioButton: Map[String, Boolean] = Map("name" -> false)
 
-    @Length {val max = 20}
+    @Length (max = 20)
     var firstName: String = _
 
-    @Length {val max = 20}
+    @Length (max = 20)
     var lastName: String = _
   }
 
   class ValidDropDown extends Form {
-    @DropDown {val multi = false}
+    @DropDown (multi = false)
     var drop: Map[String, Boolean] = Map("ko" -> false)
 
-    @Length {val max = 20}
+    @Length (max = 20)
     var firstName: String = _
 
-    @Length {val max = 20}
+    @Length (max = 20)
     var lastName: String = _
   }
   class ValidCheckBox extends Form {
-    @CheckBox {val multi = false}
+    @CheckBox (multi = false)
     var people: Map[String, Boolean] = Map("name" -> false,"Jon"->true)
 
-    @Length {val max = 20}
+    @Length (max = 20)
     var firstName: String = _
 
-    @Length {val max = 20}
+    @Length (max = 20)
     var lastName: String = _
   }
   class NoNValidForm extends Form {
-    @CheckBox {val multi = false}
+    @CheckBox (multi = false)
     var people: Map[String, Boolean] = Map("name" -> false,"Jon"->false)
-    
-
   }
 
   describe("a Form") {

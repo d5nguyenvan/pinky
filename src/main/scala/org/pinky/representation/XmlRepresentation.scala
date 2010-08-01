@@ -2,7 +2,6 @@ package org.pinky.representation
 
 import _root_.com.thoughtworks.xstream.XStream
 import java.io.{BufferedWriter, OutputStreamWriter, OutputStream}
-import scala.collection.jcl._
 
 
 /**
@@ -19,10 +18,10 @@ class XmlRepresentation extends Representation {
    * @param data data coming from the user
    * @param out outputstream used to print out the response
    */
-  def write(data: Map[String, AnyRef], out: OutputStream) = {
-    data.removeKey("template")
+  def write(rawdata: Map[String, AnyRef], out: OutputStream) = {
+    val data = rawdata - ("template")
     val outWriter = new BufferedWriter(new OutputStreamWriter(out))
-    outWriter.write(xstream.toXML(data.asInstanceOf[MapWrapper[String, AnyRef]].underlying))
+    outWriter.write(xstream.toXML(data))
     outWriter.close
 
   }

@@ -19,9 +19,9 @@ trait BaseValidator {
   def isSatisfied(validatedObject: Object, value: Object, context: OValContext, validator: Validator): Boolean = {
     ?(value) match {
       case Some(map) =>
-        if (map.isInstanceOf[Map[String, Boolean]]) {
+        try{
           map.asInstanceOf[Map[String, Boolean]] find (kv => kv._2 == true) match {case Some(kv) => true; case None => false}
-        } else return false
+        } catch {case (ex: ClassCastException)=> false}
       case None => false
     }
   }

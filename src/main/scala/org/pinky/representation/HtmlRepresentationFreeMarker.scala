@@ -1,11 +1,11 @@
 package org.pinky.representation
 
 import _root_.javax.servlet.ServletContext
-import _root_.scala.collection.jcl.{MapWrapper, HashMap, Map}
 import com.google.inject.Inject
 import freemarker.template.{DefaultObjectWrapper, Configuration}
 import java.io.{File, BufferedWriter, OutputStreamWriter, OutputStream}
-
+import collection.JavaConversions._
+ 
 /**
  * Provides FreeMarker rendering
  *
@@ -34,7 +34,7 @@ class HtmlRepresentationFreeMarker @Inject()(ctx: ServletContext) extends Repres
         data("template").asInstanceOf[String] + ".ftl"
       val template = cfg.getTemplate(templateFile)
       val tmplWriter = new BufferedWriter(new OutputStreamWriter(out));
-      template.process(data.asInstanceOf[MapWrapper[String, AnyRef]].underlying, tmplWriter)
+      template.process(data, tmplWriter)
       // Process the template
       tmplWriter.flush();
     } catch {case e: Exception => {e.printStackTrace; throw e}}

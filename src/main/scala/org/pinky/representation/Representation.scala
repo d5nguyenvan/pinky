@@ -1,7 +1,6 @@
 package org.pinky.representation
 
 import java.io.OutputStream
-import scala.collection.jcl._
 
 /**
  * Main trait which defines a representation

@@ -5,12 +5,12 @@ package org.pinky.util
  * <br><br>
  *  generic ARM block to support calls like
  * <pre>
- * for (conn &lt;- using (ds.getConnection)   { //do something with datasource }
+ * for (conn &lt;- using (ds.getConnection)    { //do something with datasource }
  * </pre>
  * or a nested one
  * <pre>
- * for (outer <- using (new PipeStream())   {
- *  for (inner <- using (new PipeStream())   {
+ * for (outer <- using (new PipeStream())    {
+ *  for (inner <- using (new PipeStream())    {
  * //do something with outer and inner
  * }
  * }

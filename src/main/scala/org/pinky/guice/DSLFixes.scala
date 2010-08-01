@@ -21,7 +21,7 @@ import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
  *
  *   This are the methods we will hide
  *   <code>
- *   public static interface ServletKeyBindingBuilder   {
+ *   public static interface ServletKeyBindingBuilder    {
  *       void with(Class<? extends HttpServlet> servletKey);
  *       void with(Key<? extends HttpServlet> servletKey);
  *       void with(Class<? extends HttpServlet> servletKey, Map<String, String> contextParams);
@@ -29,14 +29,14 @@ import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
  * }
  *   </code>
  *
- * @author fede silva gmail com   { fedesilva }
+ * @author fede silva gmail com    { fedesilva }
  *
  */
 object DSLFixes {
 
   /**
    * The rich type.
-   * @author fede silva gmail com   { fedesilva }
+   * @author fede silva gmail com    { fedesilva }
    */
   class RichBuilder(builder: ServletModule.ServletKeyBindingBuilder) {
     def by[T <: HttpServlet](servletKey: Class[T]) {builder.`with`(servletKey)};
@@ -72,7 +72,7 @@ object DSLFixes {
 
   /**
    * The implicit type conversion.
-   * @author fede silva gmail com   { fedesilva }
+   * @author fede silva gmail com    { fedesilva }
    */
   implicit def builderToRichBuilder(
           builder: ServletModule.ServletKeyBindingBuilder) = new RichBuilder(builder);

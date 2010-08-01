@@ -3,9 +3,9 @@ package org.pinky.representation
 import _root_.javax.servlet.ServletContext
 import _root_.org.apache.velocity.app.VelocityEngine
 import _root_.org.apache.velocity.VelocityContext
-import _root_.scala.collection.jcl.{MapWrapper, HashMap, Map}
 import com.google.inject.Inject
 import java.io.{BufferedWriter, OutputStreamWriter, OutputStream}
+import collection.JavaConversions._
 
 /**
  * Provides Velocity rendering, which is actually the default html rendering
@@ -27,7 +27,7 @@ class HtmlRepresentationVelocity @Inject()(ctx: ServletContext) extends Represen
   def write(data: Map[String, AnyRef], out: OutputStream) = {
     // Create the context
     try {
-      val context = new VelocityContext(data.asInstanceOf[MapWrapper[String, AnyRef]].underlying);
+      val context = new VelocityContext(data);
 
       // Load the template
       val templateFile = if (data("template").asInstanceOf[String].endsWith(".vm"))
@@ -42,7 +42,7 @@ class HtmlRepresentationVelocity @Inject()(ctx: ServletContext) extends Represen
       tmplWriter.flush();
     } catch {
       case e: Exception => {
-        println("TEMPLATE DIR:"+engine.getProperty("file.resource.loader.path"))
+        println("TEMPLATE DIR:" + engine.getProperty("file.resource.loader.path"))
         e.printStackTrace;
         throw e
       }

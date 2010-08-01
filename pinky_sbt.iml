@@ -1,21 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
-  <component name="FacetManager">
-    <facet type="Scala" name="Scala">
-      <configuration>
-        <option name="myScalaCompilerJarPaths">
-          <array>
-            <option value="$MODULE_DIR$/../../Library/Application Support/IntelliJIdea90CE/Scala/lib/scala-compiler.jar" />
-          </array>
-        </option>
-        <option name="myScalaSdkJarPaths">
-          <array>
-            <option value="$MODULE_DIR$/../../Library/Application Support/IntelliJIdea90CE/Scala/lib/scala-library.jar" />
-          </array>
-        </option>
-      </configuration>
-    </facet>
-  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -29,37 +13,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="scala-2.7.7" level="application" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/lib_managed/compile" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/lib_managed/compile" recursive="false" />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/lib_managed/provided" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/lib_managed/provided" recursive="false" />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/lib_managed/test" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/lib_managed/test" recursive="false" />
-      </library>
-    </orderEntry>
     <orderEntry type="module-library" scope="RUNTIME">
       <library>
         <CLASSES>
@@ -67,6 +20,22 @@
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib_managed/scala_2.8.0/compile" />
+          <root url="file://$MODULE_DIR$/lib_managed/scala_2.8.0/provided" />
+          <root url="file://$MODULE_DIR$/lib_managed/scala_2.8.0/test" />
+          <root url="file://$MODULE_DIR$/project/boot/scala-2.8.0/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/lib_managed/scala_2.8.0/compile" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib_managed/scala_2.8.0/provided" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib_managed/scala_2.8.0/test" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/project/boot/scala-2.8.0/lib" recursive="false" />
       </library>
     </orderEntry>
   </component>
