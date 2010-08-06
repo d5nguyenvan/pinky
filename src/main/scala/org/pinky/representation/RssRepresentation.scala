@@ -39,28 +39,14 @@ class RssRepresentation extends Representation {
        </rss>"""
 
     val headerRss =
-    <title>
-      {header.title}
-    </title>
-            <link>
-              {header.link}
-            </link>
-            <description>
-              {header.description}
-            </description>
-            <language>
-              {header.language}
-            </language>
-            <copyright>
-              {header.copyright}
-            </copyright>
-            <pubDate>
-              {header.pubdate}
-            </pubDate>
-            <lastBuildDate>
-              {header.lastdate}
-            </lastBuildDate>
-            <docs>http://blogs.law.harvard.edu/tech/rss</docs>;
+    <title>{header.title}</title>
+    <link>{header.link}</link>
+    <description>{header.description}</description>
+    <language>{header.language}</language>
+    <copyright>{header.copyright}</copyright>
+    <pubDate>{header.pubdate}</pubDate>
+    <lastBuildDate>{header.lastdate}</lastBuildDate>
+    <docs>http://blogs.law.harvard.edu/tech/rss</docs>;
 
     return headerTags + headerRss.mkString + "\n" + printItems(items) + "\n" + footerTags
   }
@@ -76,21 +62,11 @@ class RssRepresentation extends Representation {
     for (item <- items) {
       val xmlItem =
       <item>
-        <title>
-          {item.itemtitle}
-        </title>
-        <link>
-          {item.itemlink}
-        </link>
-        <description>
-          {item.itemdescription}
-        </description>
-        <pubDate>
-          {item.itempubdate}
-        </pubDate>
-        <guid>
-          {item.itemguid}
-        </guid>
+        <title>{item.itemtitle}</title>
+        <link>{item.itemlink}</link>
+        <description>{item.itemdescription}</description>
+        <pubDate>{item.itempubdate}</pubDate>
+        <guid>{item.itemguid}</guid>
       </item>;
       ret.append(xmlItem.toString)
     }

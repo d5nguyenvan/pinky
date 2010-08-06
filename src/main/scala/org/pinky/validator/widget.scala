@@ -17,6 +17,7 @@ import net.sf.oval.context.OValContext
 
 trait BaseValidator {
   def isSatisfied(validatedObject: Object, value: Object, context: OValContext, validator: Validator): Boolean = {
+    println ("VALUEEEEEE:"+value)
     ?(value) match {
       case Some(map) =>
         try{

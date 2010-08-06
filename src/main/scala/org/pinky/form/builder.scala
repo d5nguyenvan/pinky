@@ -21,10 +21,10 @@ private[form] trait Default {
   def loadRequest(requestParams: java.util.Map[String, Array[String]]) = {
     for ((key, paramValues) <- requestParams) {
       for (setter <- this.getClass.getMethods if (setter.getName.toLowerCase.contains(key.toLowerCase + "_$eq"))) {
-        if (isComplexWidget(setter)) {
+        val getter  = for (method <- this.getClass.getMethods if method.getName == setter.getName.replace("_$eq", "")) yield method
+        if (getter.size > 0 && isComplexWidget(getter(0))) {
           //first get the current field map if any
-          for (getter <- this.getClass.getMethods if (getter.getName.toLowerCase == setter.getName.toLowerCase.replace("_$eq", ""))) {
-            var currentField = getter.invoke(this).asInstanceOf[mutable.Map[String, Boolean]]
+            var currentField = getter(0).invoke(this).asInstanceOf[mutable.Map[String, Boolean]]
             //set values whenever is possible
             if (currentField != null) {
               for (param <- paramValues) {
@@ -33,8 +33,9 @@ private[form] trait Default {
               //save field
               setter.invoke(this, currentField)
             }
-          }
-        } else setter.invoke(this, paramValues(0))
+        } else {
+          setter.invoke(this, paramValues(0))
+        }
       }
     }
   }
@@ -44,6 +45,7 @@ private[form] trait Default {
    *  by complex widget we mean widgets that can vary in terms of size
    */
   private def isComplexWidget(method: Method): Boolean = {
+
     for (annotation <- method.getDeclaredAnnotations
          if ((annotation.annotationType == classOf[CheckBox] ||
                  annotation.annotationType == classOf[DropDown] ||
@@ -65,7 +67,7 @@ private[form] trait Default {
     var formBody = new StringBuffer()
     var action = ""
     var formType = "application/x-www-form-urlencoded"
-    // add fields
+ 
 
     for (setter <- form.getClass.getMethods if setter.getName.contains("_$eq")) {
       for (getter <- form.getClass.getMethods if getter.getName == setter.getName.replace("_$eq", "")) {
@@ -229,7 +231,6 @@ trait UlTagBuilder extends Form with Builder with Default {
  */
 trait Validator {
   import java.util.{List => JList, Map => JMap, HashMap, ArrayList}
-  import collection.JavaConversions._
 
   /**
    *

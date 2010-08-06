@@ -10,7 +10,9 @@ import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.Spec
 import org.pinky.annotation.form.{CheckBox, DropDown, RadioButton}
 import net.sf.oval.constraint.Length
-
+import annotation.target.getter
+import collection.JavaConversions._
+import net.sf.oval.configuration.annotation.IsInvariant
 
 /**
  * Created by IntelliJ IDEA.
@@ -23,50 +25,52 @@ import net.sf.oval.constraint.Length
 
 class FormTest extends Spec with ShouldMatchers {
   class NewForm extends Form {
-    @RadioButton
+    @(RadioButton @getter)
     var radioButton: Map[String, Boolean] = _
 
-    @Length(max = 20)
+    @(Length @getter)(max = 20)
     var firstName: String = _
 
-    @Length (max = 20)
+    @(Length @getter)(max = 20)
     var lastName: String = _
   }
 
   class ValidFormRadioButton extends Form {
-    @RadioButton
+    @(RadioButton @getter)
     var radioButton: Map[String, Boolean] = Map("name" -> false)
 
-    @Length (max = 20)
+    @(Length @getter)(max = 20)
     var firstName: String = _
 
-    @Length (max = 20)
+    @(Length @getter)(max = 20)
     var lastName: String = _
   }
 
   class ValidDropDown extends Form {
-    @DropDown (multi = false)
+    @(DropDown @getter)(multi = false)
     var drop: Map[String, Boolean] = Map("ko" -> false)
 
-    @Length (max = 20)
+    @(Length @getter)(max = 20)
     var firstName: String = _
 
-    @Length (max = 20)
+    @(Length @getter)(max = 20)
     var lastName: String = _
   }
-  class ValidCheckBox extends Form {
-    @CheckBox (multi = false)
-    var people: Map[String, Boolean] = Map("name" -> false,"Jon"->true)
+  class ValidCheckBox(
+          @(CheckBox @getter)(multi = false)
+          var people: Map[String, Boolean] = Map("name" -> false, "Jon" -> true),
 
-    @Length (max = 20)
-    var firstName: String = _
+          @(Length @getter)(max = 20)
+          var firstName: String,
 
-    @Length (max = 20)
-    var lastName: String = _
-  }
+          @(Length @getter)(max = 20)
+          var lastName: String
+          ) extends Form
+  
   class NoNValidForm extends Form {
-    @CheckBox (multi = false)
-    var people: Map[String, Boolean] = Map("name" -> false,"Jon"->false)
+    @(IsInvariant @getter)
+    @(CheckBox @getter)(multi = false)
+    var checker: Map[String, Boolean] = Map("name" -> false, "Jon" -> false)
   }
 
   describe("a Form") {
@@ -104,39 +108,35 @@ class FormTest extends Spec with ShouldMatchers {
     it("should show a form with a DropDown") {
       val form = new ValidDropDown() with ParagraphBuilder
       form.firstName = "lol"
-      form lastName = "yeah"
+      form.lastName = "yeah"
       form.render should include("<input value=\"yeah\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"lastname\" id=\"id_lastname\"></input>")
       form.render should include("<input value=\"lol\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"firstname\" id=\"id_firstname\"></input>")
       form.render should include("<select name=\"drop\">")
       form.render should include("<option value=\"ko\">")
-      form.render should not include("<tr><td>")
+      form.render should not include ("<tr><td>")
       form.render should include("<p>")
       form.render should include("</p>")
     }
     it("should show a form with a CheckBox") {
-      val form = new ValidCheckBox() with UlTagBuilder
-      form.firstName = "lol"
-      form lastName = "yeah"
+      val form = new ValidCheckBox(firstName = "lol", lastName = "yeah") with UlTagBuilder
       form.render should include("<input value=\"yeah\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"lastname\" id=\"id_lastname\"></input>")
       form.render should include("<input value=\"lol\" maxlength=\"20\" type=\"text\" size=\"20\" name=\"firstname\" id=\"id_firstname\"></input>")
-      form.render should include ("<input value=\"Name\" type=\"checkbox\" name=\"people\"></input>")
-      form.render should include ("<input value=\"Jon\" selected=\" \" type=\"checkbox\" name=\"people\"></input>")
-      form.render should not include("<p>")
+      form.render should include("<input value=\"Name\" type=\"checkbox\" name=\"people\"></input>")
+      form.render should include("<input value=\"Jon\" selected=\" \" type=\"checkbox\" name=\"people\"></input>")
+      form.render should not include ("<p>")
       form.render should include("<li>")
       form.render should include("</li>")
     }
-     it ("should not validate an invalid form") {
+    it("should not validate an invalid form") {
       val form = new NoNValidForm() with UlTagBuilder with Validator
-      println("class(invalid):"+this+" message:"+form.validate)
-      form.validate.isEmpty should be (false)
-     }
+      form.validate.isEmpty should be(false)
+    }
 
-     it ("should validate a valid form") {
-      val form = new ValidCheckBox() with UlTagBuilder with Validator
-      println("class(valid):"+this+" message:"+form.validate)
-      form.validate.isEmpty should be (true)
-     }
-  
+    it("should validate a valid form") {
+      val form = new ValidCheckBox(firstName = "", lastName = "") with UlTagBuilder with Validator
+      form.validate.isEmpty should be(true)
+    }
+
 
   }
 

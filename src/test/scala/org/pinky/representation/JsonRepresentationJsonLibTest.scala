@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 import org.scalatest.Spec
 
 import org.scalatest.matchers.ShouldMatchers
-
+import collection.JavaConversions._
 /**
  * Created by IntelliJ IDEA.
  * User: phausel

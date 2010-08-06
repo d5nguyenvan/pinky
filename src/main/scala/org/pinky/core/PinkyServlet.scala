@@ -21,7 +21,7 @@ class PinkyServlet extends HttpServlet {
       dispatch.callSuppliedBlock(request, response, handlers(request.getMethod))
     } catch {
       case ex: NoSuchElementException => throw new RuntimeException("could not find a handler for this request method, you'll need to implement a call to " + request.getMethod)
-      case ex: NullPointerException => throw new RuntimeException("guice cound not inject a ServletDispatch type, was a class with this type registered?")
+      case ex: NullPointerException => throw new RuntimeException("guice cound not inject a ServletDispatch, was a class with this type registered?")
     }
   }
 

@@ -2,7 +2,8 @@ package org.pinky.representation
 
 import _root_.com.thoughtworks.xstream.XStream
 import java.io.{BufferedWriter, OutputStreamWriter, OutputStream}
-
+import collection.JavaConversions._
+import java.util.HashMap
 
 /**
  * Provides an XML representation using xstream,
@@ -20,8 +21,10 @@ class XmlRepresentation extends Representation {
    */
   def write(rawdata: Map[String, AnyRef], out: OutputStream) = {
     val data = rawdata - ("template")
+    val javaMap = new HashMap[String,Object]
+    data foreach {case (key, value) => javaMap.put(key,value)}
     val outWriter = new BufferedWriter(new OutputStreamWriter(out))
-    outWriter.write(xstream.toXML(data))
+    outWriter.write(xstream.toXML(javaMap))
     outWriter.close
 
   }

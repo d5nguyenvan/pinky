@@ -31,7 +31,7 @@ class HtmlRepresentationFreeMarkerTest extends Spec with ShouldMatchers {
       exceptionIsThrown should be (true)
     }
 
-    it ("should fail with template key only") {
+    it ("should pass with template key only") {
         var exceptionIsThrown = false
         try {
           val rep = new HtmlRepresentationFreeMarker(null)
@@ -43,7 +43,7 @@ class HtmlRepresentationFreeMarkerTest extends Spec with ShouldMatchers {
           case _ =>
 
         }
-        exceptionIsThrown should be (true)
+        exceptionIsThrown should be (false)
     }
 
     it ("with right params it should render") {
