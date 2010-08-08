@@ -13,7 +13,7 @@ case object Stop
 
 
 trait Client {
-  protected class DefaulActor(workers: Seq[ActorRef] = Array[ActorRef](), executor: ScheduledThreadPoolExecutor = executor) extends Actor {
+  protected class DefaultActor(workers: Seq[ActorRef] = Array[ActorRef](), executor: ScheduledThreadPoolExecutor = executor) extends Actor {
     val thisRef = Actor.actorOf(this)
 
     override def shutdown = {
@@ -35,7 +35,7 @@ trait Client {
   
   val delay: Every = this.getClass().getAnnotation(classOf[Every])
 
-  val thisRef = actorOf(new DefaulActor(workers, executor))
+  val thisRef = actorOf(new DefaultActor(workers, executor))
 
   def fireStarter(block: => Unit): Unit = {
     if (!thisRef.isRunning) thisRef.startLink(thisRef)

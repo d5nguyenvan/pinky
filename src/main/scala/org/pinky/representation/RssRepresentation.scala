@@ -28,27 +28,23 @@ class RssRepresentation extends Representation {
     val items = data("rssitems").asInstanceOf[List[RssItem]]
     val header = data("rssheader").asInstanceOf[RssHeader]
 
-    val headerTags =
-    """<?xml version="1.0"?>
-       <rss version="2.0">
-       <channel>
-       """
+    val headerTags ="""<?xml version="1.0"?>
+<rss version="2.0">
+<channel>"""
 
-    val footerTags =
-    """</channel>
-       </rss>"""
+    val footerTags ="""</channel>
+</rss>"""
 
-    val headerRss =
-    <title>{header.title}</title>
-    <link>{header.link}</link>
-    <description>{header.description}</description>
-    <language>{header.language}</language>
-    <copyright>{header.copyright}</copyright>
-    <pubDate>{header.pubdate}</pubDate>
-    <lastBuildDate>{header.lastdate}</lastBuildDate>
-    <docs>http://blogs.law.harvard.edu/tech/rss</docs>;
+    val headerRss = <title>{header.title}</title>
+            <link>{header.link}</link>
+            <description>{header.description}</description>
+            <language>{header.language}</language>
+            <copyright>{header.copyright}</copyright>
+            <pubDate>{header.pubdate}</pubDate>
+            <lastBuildDate>{header.lastdate}</lastBuildDate>
+            <docs>http://blogs.law.harvard.edu/tech/rss</docs>;
 
-    return headerTags + headerRss.mkString + "\n" + printItems(items) + "\n" + footerTags
+    return headerTags +"\n"+ headerRss.mkString + "\n" + printItems(items) + "\n" + footerTags
   }
 
 
@@ -60,14 +56,13 @@ class RssRepresentation extends Representation {
 
     var ret = new StringBuffer()
     for (item <- items) {
-      val xmlItem =
-      <item>
-        <title>{item.itemtitle}</title>
-        <link>{item.itemlink}</link>
-        <description>{item.itemdescription}</description>
-        <pubDate>{item.itempubdate}</pubDate>
-        <guid>{item.itemguid}</guid>
-      </item>;
+      val xmlItem = <item>
+<title>{item.itemtitle}</title>
+<link>{item.itemlink}</link>
+<description>{item.itemdescription}</description>
+<pubDate>{item.itempubdate}</pubDate>
+<guid>{item.itemguid}</guid>
+</item>;
       ret.append(xmlItem.toString)
     }
     ret.toString

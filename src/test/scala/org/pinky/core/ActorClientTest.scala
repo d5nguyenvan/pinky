@@ -31,9 +31,9 @@ class ActorClientTest extends Spec with ShouldMatchers {
   }
 
 
-  class DispatchMock extends Dispatch {
-    def call(request: HttpServletRequest, response: HttpServletResponse)(block: => Map[String, AnyRef]) {
-      block
+  class DispatchMock extends ServletDispatch {
+    def callSuppliedBlock(request: HttpServletRequest, response: HttpServletResponse, block: Function2[HttpServletRequest, HttpServletResponse, Map[String, AnyRef]]) = {
+      block(request,response)
     }
   }
 
@@ -44,9 +44,10 @@ class ActorClientTest extends Spec with ShouldMatchers {
       var request = mock(classOf[HttpServletRequest])
       var response = mock(classOf[HttpServletResponse])
       when(request.getParameter("name")).thenReturn("Jonas")
-      var dispatch = new DispatchMock
-      val servlet = new ExampleServlet(dispatch, new PingPongClient with CountDownActors) 
-      servlet.doGet(request, response)
+      val servlet = new ExampleServlet(new PingPongClient with CountDownActors) {
+        override val dispatch = new DispatchMock
+      }
+      servlet.makeCall("GET",request, response)
       val received = latch.await(4, TimeUnit.SECONDS)
       received should be(true)
       ActorRegistry.shutdownAll

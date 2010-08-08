@@ -16,13 +16,17 @@ class PinkyServlet extends HttpServlet {
 
   import collection.JavaConversions._
 
-  override def service(request: HttpServletRequest, response: HttpServletResponse) = {
-    try {
-      dispatch.callSuppliedBlock(request, response, handlers(request.getMethod))
+  def makeCall(method: String, request: HttpServletRequest, response: HttpServletResponse) {
+      try {
+      dispatch.callSuppliedBlock(request, response, handlers(method))
     } catch {
       case ex: NoSuchElementException => throw new RuntimeException("could not find a handler for this request method, you'll need to implement a call to " + request.getMethod)
       case ex: NullPointerException => throw new RuntimeException("guice cound not inject a ServletDispatch, was a class with this type registered?")
     }
+  }
+  
+  override def service(request: HttpServletRequest, response: HttpServletResponse) = {
+       makeCall(request.getMethod,request,response)
   }
 
   private val handlers = collection.mutable.Map[String, Function2[HttpServletRequest, HttpServletResponse, Map[String, AnyRef]]]()

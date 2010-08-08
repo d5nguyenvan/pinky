@@ -26,7 +26,7 @@ class MyActorCometClient(continuation: Continuation, request: HttpServletRequest
 
   val url = new URL("http://twitter.com/statuses/user_timeline/5047741.rss")
 
-  class MyActor extends DefaulActor  {
+  class MyActor extends DefaultActor  {
     override def receive = super.receive orElse handler {
       case "readfeed" => {
         for (line <- Source.fromInputStream(url.openStream).getLines) {
@@ -36,6 +36,7 @@ class MyActorCometClient(continuation: Continuation, request: HttpServletRequest
       }
     }
   }
+
   override val thisRef = Actor.actorOf(new MyActor)
 
   def callback = {

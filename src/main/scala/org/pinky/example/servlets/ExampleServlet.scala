@@ -47,7 +47,7 @@ class PingPongClient extends ActorClient with Workers {
  */
 
 @Singleton
-class ExampleServlet @Inject()(dispatch: Dispatch, actorClient: ActorClient) extends PinkyServlet {
+class ExampleServlet @Inject()(actorClient: ActorClient) extends PinkyServlet {
   
   GET {
     (request: HttpServletRequest, response: HttpServletResponse) =>
