@@ -3,8 +3,8 @@ package org.pinky.example.servlets
 
 import com.google.inject._
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
-import org.pinky.core.{ActorClient, Dispatch}
 import se.scalablesolutions.akka.actor.{ActorRef, Actor}
+import org.pinky.core.{PinkyServlet, ActorClient, Dispatch}
 
 class PingActor(pong: ActorRef) extends Actor {
   def receive = {
@@ -47,19 +47,17 @@ class PingPongClient extends ActorClient with Workers {
  */
 
 @Singleton
-class ExampleServlet @Inject()(dispatch: Dispatch, actorClient: ActorClient) extends HttpServlet {
-  override def doGet(request: HttpServletRequest, response: HttpServletResponse) = {
-    dispatch.call(request, response) {
+class ExampleServlet @Inject()(dispatch: Dispatch, actorClient: ActorClient) extends PinkyServlet {
+  
+  GET {
+    (request: HttpServletRequest, response: HttpServletResponse) =>
       val data = Map("name" -> {if (request.getParameter("name") == null) "default" else request.getParameter("name")})
       actorClient.fireStarter(data)
-    }
   }
 
-  override def doPost(request: HttpServletRequest, response: HttpServletResponse) = {
-    dispatch.call(request, response) {
-      Map("name" -> "Changing state with POST")
-    }
-
+  POST {
+    (request: HttpServletRequest, response: HttpServletResponse) =>
+        Map("name" -> "Changing state with POST")
   }
 
 }
