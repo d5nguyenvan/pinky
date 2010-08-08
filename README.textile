@@ -1,1 +1,3 @@
-"documentation":http://wiki.github.com/pk11/pinky/
+pinky is a Scala REST/MVC glue web framework built on top of Guice and Guice Servlet. Pinky provides out-of-the-box support for dealing with forms, akka actors, domain objects, jdbc and rss/xml/json/html content types 
+
+"more information":http://wiki.github.com/pk11/pinky/
