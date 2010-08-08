@@ -10,33 +10,40 @@ case object UnSchedule
 case object Resume
 case object Stop
 
-trait Client extends Actor {
+
+
+trait Client {
+  protected class DefaulActor(workers: Seq[ActorRef] = Array[ActorRef](), executor: ScheduledThreadPoolExecutor = executor) extends Actor {
+    val thisRef = Actor.actorOf(this)
+
+    override def shutdown = {
+      if (workers != null) for (worker <- workers if worker.isRunning) thisRef.unlink(worker)
+      if (thisRef.isRunning) thisRef.unlink(thisRef)
+      executor.shutdown
+    }
+
+    override def receive = {
+      case UnSchedule => thisRef.shutdownLinkedActors
+      case Stop => thisRef.stop
+      case _ => println("could not understand this message")
+    }
+  }
+
   var workers: Seq[ActorRef] = _
-  val thisRef = actorOf(this)
 
   val executor = new ScheduledThreadPoolExecutor(10, new ThreadPoolExecutor.AbortPolicy())
+  
   val delay: Every = this.getClass().getAnnotation(classOf[Every])
 
+  val thisRef = actorOf(new DefaulActor(workers, executor))
+
   def fireStarter(block: => Unit): Unit = {
-    if (!thisRef.isRunning)  thisRef.startLink(thisRef)
+    if (!thisRef.isRunning) thisRef.startLink(thisRef)
     if (delay != null) {
       executor.scheduleWithFixedDelay(new java.lang.Runnable {def run = block}, parseDuration(delay.value()), parseDuration(delay.value()), TimeUnit.SECONDS)
     } else {
       block
     }
-  }
-
-
-  override def shutdown = {
-    if (workers != null) for (worker <- workers if worker.isRunning) thisRef.unlink(worker)
-    if (thisRef.isRunning) thisRef.unlink(thisRef)
-    executor.shutdown
-  }
-
-  override def receive = {
-    case UnSchedule => shutdown
-    case Stop => thisRef.stop
-    case _ => println("could not understand this message")
   }
 
 

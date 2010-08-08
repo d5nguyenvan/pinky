@@ -10,6 +10,8 @@ import scala.xml._
 import org.pinky.util.ARM.using
 import org.pinky.actor.Resume
 import org.pinky.core.ActorCometClient
+import java.util.concurrent.ScheduledThreadPoolExecutor
+import se.scalablesolutions.akka.actor.{ActorRef, Actor}
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,16 +23,20 @@ import org.pinky.core.ActorCometClient
 
 class MyActorCometClient(continuation: Continuation, request: HttpServletRequest)
         extends ActorCometClient(continuation, request) {
+
   val url = new URL("http://twitter.com/statuses/user_timeline/5047741.rss")
 
-  override def receive = handler {
-    case "readfeed" => {
-      for (line <- Source.fromInputStream(url.openStream).getLines) {
-        val stuff = for (title <- (XML.loadString((line)) \\ "title")) yield title.text
-        writer(continuation).println(stuff.mkString("<br>"))
+  class MyActor extends DefaulActor  {
+    override def receive = super.receive orElse handler {
+      case "readfeed" => {
+        for (line <- Source.fromInputStream(url.openStream).getLines) {
+          val stuff = for (title <- (XML.loadString((line)) \\ "title")) yield title.text
+          writer(continuation).println(stuff.mkString("<br>"))
+        }
       }
     }
   }
+  override val thisRef = Actor.actorOf(new MyActor)
 
   def callback = {
     println("about to hit callback")

@@ -68,7 +68,6 @@ class RssRepresentationTest extends Spec with ShouldMatchers {
 
       val representation = new RssRepresentation()
       representation.write(data, out)
-      println(out.toString)
       out.toString.trim.contains("<title>Test</title>") should be(true)
       out.toString.trim.contains("<description>MISC MISC</description>") should be(true)
       out.toString.trim.contains("<guid>http://localstation.com/item11#1</guid>") should be(true)

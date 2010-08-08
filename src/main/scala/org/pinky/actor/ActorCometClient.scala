@@ -16,11 +16,11 @@ abstract class ActorCometClient(continuation: Continuation, request: HttpServlet
         val out = continuation.getServletResponse.getWriter
         out.flush()
         out.close()
-        shutdown
+        thisRef.shutdownLinkedActors
         continuation.complete()
       }
     }
-    resumeHandler orElse messageHandler orElse super.receive
+    resumeHandler orElse messageHandler 
   }
 
   def writer(continuation: Continuation): PrintWriter = continuation.getServletResponse.getWriter
