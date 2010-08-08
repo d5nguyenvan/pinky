@@ -47,7 +47,7 @@ class ActorClientTest extends Spec with ShouldMatchers {
       val servlet = new ExampleServlet(new PingPongClient with CountDownActors) {
         override val dispatch = new DispatchMock
       }
-      servlet.makeCall("GET",request, response)
+      servlet.makeCall(RequestMethods.GET.toString,request, response)
       val received = latch.await(4, TimeUnit.SECONDS)
       received should be(true)
       ActorRegistry.shutdownAll

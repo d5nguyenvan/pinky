@@ -3,6 +3,14 @@ package org.pinky.core
 import javax.servlet.http.{HttpServlet, HttpServletRequest, HttpServletResponse}
 import com.google.inject.Inject
 
+object RequestMethods extends Enumeration {
+  type RequestMethods = Value
+  val GET = Value("GET")
+  val POST = Value("POST")
+  val DELETE = Value("DELETE")
+  val PUT = Value("PUT") 
+}
+
 /**
  * Created by IntelliJ IDEA.
  * User: phausel
@@ -43,18 +51,18 @@ class PinkyServlet extends HttpServlet {
   //}
 
   def GET(block: (HttpServletRequest, HttpServletResponse) => Map[String, AnyRef]) {
-    handlers += ("GET" -> block)
+    handlers += (RequestMethods.GET.toString -> block)
   }
 
   def POST(block: (HttpServletRequest, HttpServletResponse) => Map[String, AnyRef]) {
-    handlers += ("POST" -> block)
+    handlers += (RequestMethods.POST.toString  -> block)
   }
 
   def PUT(block: (HttpServletRequest, HttpServletResponse) => Map[String, AnyRef]) {
-    handlers += ("PUT" -> block)
+    handlers += (RequestMethods.PUT.toString -> block)
   }
 
   def DELETE(block: (HttpServletRequest, HttpServletResponse) => Map[String, AnyRef]) {
-    handlers += ("DELETE" -> block)
+    handlers += (RequestMethods.DELETE.toString -> block)
   }
 }
