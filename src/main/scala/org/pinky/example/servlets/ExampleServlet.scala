@@ -46,7 +46,6 @@ class PingPongClient extends ActorClient with Workers {
  * @author peter hausel gmail com (Peter Hausel)
  */
 
-@Singleton
 class ExampleServlet @Inject()(actorClient: ActorClient) extends PinkyServlet {
   
   GET {

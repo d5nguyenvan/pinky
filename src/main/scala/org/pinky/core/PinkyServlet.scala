@@ -1,7 +1,7 @@
 package org.pinky.core
 
 import javax.servlet.http.{HttpServlet, HttpServletRequest, HttpServletResponse}
-import com.google.inject.Inject
+import com.google.inject._
 
 object RequestMethods extends Enumeration {
   type RequestMethods = Value
@@ -19,6 +19,7 @@ object RequestMethods extends Enumeration {
  * To change this template use File | Settings | File Templates.
  */
 
+@Singleton
 class PinkyServlet extends HttpServlet {
   @Inject() val dispatch: ServletDispatch = null
 
