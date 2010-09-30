@@ -13,14 +13,19 @@ import collection.JavaConversions._
  * @author peter hausel gmail com (Peter Hausel)
  */
 class HtmlRepresentationFreeMarker @Inject()(ctx: ServletContext) extends Representation {
-  val cfg = new Configuration
+  protected def spawnConfiguration = {
+    val cfg = new Configuration
 
-  cfg.setObjectWrapper(new DefaultObjectWrapper())
-  if (ctx != null)
-    cfg.setServletContextForTemplateLoading(ctx, "template")
-  else {
-    cfg.setDirectoryForTemplateLoading(new File(new File(".").getCanonicalPath() + "/src/main/webapp/template"))
+    cfg.setObjectWrapper(new DefaultObjectWrapper())
+    if (ctx != null)
+      cfg.setServletContextForTemplateLoading(ctx, "template")
+    else {
+      cfg.setDirectoryForTemplateLoading(new File(new File(".").getCanonicalPath() + "/src/main/webapp/template"))
+    }
+    cfg
   }
+
+  lazy val cfg = spawnConfiguration
 
   /**
    * @param data data coming from the user
