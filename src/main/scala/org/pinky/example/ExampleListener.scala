@@ -7,8 +7,8 @@ import servlets._
 import org.pinky.comet.CometServlet
 import org.eclipse.jetty.continuation.ContinuationFilter
 import com.google.inject.{Scopes, AbstractModule}
-import org.pinky.guice.{PinkyServletContextListener, RepresentationModule}
-
+import org.pinky.guice.{ScalaServletModule, PinkyServletContextListener, RepresentationModule}
+import uk.me.lings.scalaguice.ScalaModule
 /**
  * Listener example which demonstrates how to configure guice managed filters, servlets and other components the "pinky way"
  *
@@ -20,18 +20,18 @@ class ExampleListener extends PinkyServletContextListener
 {
   modules = Array(
     new RepresentationModule(),
-    new AbstractModule() {
-      def configure() {
-        bind(classOf[ActorClient]) to classOf[PingPongClient] 
-        bind(classOf[ContinuationFilter]) in Scopes.SINGLETON
+    new AbstractModule with ScalaModule{
+      def configure {
+        bind[ActorClient].to[PingPongClient] 
+        bind[ContinuationFilter].in(Scopes.SINGLETON)
       }
     },
-    new ServletModule() {
-      filter("/hello/*") through classOf[ExampleFilter]
-      filter("/comet*") through classOf[ContinuationFilter] 
-      serve("/comet*") by classOf[ExampleCometServlet]
-      serve("*.rss") by classOf[ExampleRssServlet] 
-      serve("/hello/*") by classOf[ExampleServlet]
+    new ServletModule with ScalaServletModule {
+      filterThrough[ExampleFilter] ("/hello/*")
+      filterThrough[ContinuationFilter] ("/comet*") 
+      serveWith[ExampleCometServlet] ("/comet*")
+      serveWith[ExampleRssServlet] ("*.rss") 
+      serveWith[ExampleServlet] ("/hello/*")
     }
 
     )
