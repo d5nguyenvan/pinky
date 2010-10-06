@@ -19,7 +19,6 @@ object RequestMethods extends Enumeration {
  * To change this template use File | Settings | File Templates.
  */
 
-@Singleton
 class PinkyServlet extends HttpServlet {
   @Inject() val dispatch: ServletDispatch = null
 
