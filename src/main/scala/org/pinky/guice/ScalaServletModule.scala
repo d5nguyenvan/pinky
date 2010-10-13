@@ -11,20 +11,43 @@ abstract class ScalaModule extends com.google.inject.AbstractModule with uk.me.l
 
 class ScalaServletModule extends ServletModule {
 
+
   protected def binderAccess = super.binder 
 
-  def serveWith[T <: HttpServlet](url: String, urls: String*)(implicit m:Manifest[T]) { 
-    super.serve(url,urls: _*).by(m.erasure.asInstanceOf[Class[T]])
+  private[guice] def _serve(url:String, urls:String*)  = super.serve(url, urls:_*)
+  private[guice] def _filter(url:String, urls:String*) = super.filter(url, urls:_*) 
+  private[guice] def _serveRegex(url:String, urls:String*) = super.serveRegex (url, urls:_*)
+  private[guice] def _filterRegex(url:String, urls:String*) = super.filterRegex (url, urls:_*)
+
+  def bindServlet[T <: HttpServlet] (implicit m:Manifest[T]): Builder[T] = { 
+    new ServletBuilder[T](this)
   }
-  def serveRegexWith[T <: HttpServlet](url: String, urls: String*)(implicit m:Manifest[T]) { 
-    super.serveRegex(url,urls: _*).by(m.erasure.asInstanceOf[Class[T]])
+  def bindFilter[T <: Filter](implicit m:Manifest[T]): Builder[T] = { 
+    new FilterBuilder[T](this)
   }
-  def filterThrough[T <: Filter](url: String, urls: String*)(implicit m:Manifest[T]) {
-    super.filter(url,urls : _*).through(m.erasure.asInstanceOf[Class[T]])
-  } 
-  def filterRegexThrough[T <: Filter](url: String, urls: String*)(implicit m:Manifest[T]) {
-    super.filterRegex(url,urls: _*).through(m.erasure.asInstanceOf[Class[T]])
+
+}
+
+abstract class Builder[T]() {
+  def toUrl(pattern: String, patterns: String*)
+  def toRegexUrl(pattern: String, patterns: String*)
+}
+
+class ServletBuilder[T <: HttpServlet](module: ScalaServletModule)(implicit m:Manifest[T]) extends Builder[T] {
+  def toUrl(pattern: String, patterns: String*) {
+     module._serve(pattern, patterns: _*).by((m.erasure.asInstanceOf[Class[T]]))
   }
-  
+  def toRegexUrl(pattern: String, patterns: String*){
+     module._serveRegex(pattern, patterns: _*).by((m.erasure.asInstanceOf[Class[T]]))
+  }
+}
+
+class FilterBuilder[T <: Filter](module: ScalaServletModule)(implicit m:Manifest[T]) extends Builder[T] {
+  def toUrl(pattern: String, patterns: String*){
+     module._filter(pattern, patterns.toArray: _*).through((m.erasure.asInstanceOf[Class[T]]))
+  }
+  def toRegexUrl(pattern: String, patterns: String*){
+     module._filterRegex(pattern, patterns.toArray: _*).through((m.erasure.asInstanceOf[Class[T]]))
+  }
 }
 // vim: set ts=4 sw=4 et:

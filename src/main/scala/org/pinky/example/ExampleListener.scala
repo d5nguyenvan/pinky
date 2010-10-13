@@ -6,7 +6,8 @@ import servlets._
 import org.pinky.comet.CometServlet
 import org.eclipse.jetty.continuation.ContinuationFilter
 import com.google.inject.{Scopes, AbstractModule}
-import org.pinky.guice.{ScalaServletModule, ScalaModule, PinkyServletContextListener, RepresentationModule}
+import org.pinky.guice.{AsServlet,AsFilter,CakeServletModule, ScalaServletModule, ScalaModule, PinkyServletContextListener, RepresentationModule}
+
 
 /**
  * Listener example which demonstrates how to configure guice managed filters, servlets and other components the "pinky way"
@@ -14,7 +15,6 @@ import org.pinky.guice.{ScalaServletModule, ScalaModule, PinkyServletContextList
  * @author peter hausel gmail com (Peter Hausel)
  *
  */
-
 class ExampleListener extends PinkyServletContextListener
 {
   modules = Array (
@@ -26,12 +26,21 @@ class ExampleListener extends PinkyServletContextListener
       }
     },
     new ScalaServletModule {
-      filterThrough[ExampleFilter] ("/hello/*")
-      filterThrough[ContinuationFilter] ("/comet*") 
-      serveWith[ExampleCometServlet] ("/comet*")
-      serveWith[ExampleRssServlet] ("*.rss") 
-      serveWith[ExampleServlet] ("/hello/*")
+      override def configureServlets {
+        bindFilter[ExampleFilter].toUrl("/hello/*")
+        bindFilter[ContinuationFilter].toUrl("/comet*") 
+        bindServlet[ExampleCometServlet].toUrl("/comet*")
+        bindServlet[ExampleRssServlet].toUrl("*.rss") 
+        //bindServlet[ExampleServlet].toUrl("/hello/*")
+      }
+    },
+    new CakeServletModule with CakeExampleContainer with ExampleServletCakeContainer {
+      val example = new Eater
+      override def configureServlets {
+        bindServlet(new ExampleServletCake).toUrl("/hello/*")
+      }  
     }
+
 
     )
 
