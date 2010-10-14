@@ -12,8 +12,7 @@ import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
  *  Import this object into the scope in which you need to do
  *  <code>serve("*.rss").with(classOf[ExampleRssServlet])</code>
  *  and do
- *  <code>serve("*.rss").by(classOf[ExampleRssServlet])</code> or
- *  <code>serve("*.rss").withClass(classOf[ExampleRssServlet])</code>
+ *  <code>serve("*.rss").by(classOf[ExampleRssServlet])</code> 
  *  instead.
  *
  *   This are the methods we will hide
@@ -47,24 +46,6 @@ object DSLFixes {
     def by[T <: HttpServlet](
             servletKey: Key[T],
             params: java.util.Map[String, String]) {builder.`with`(servletKey, params)};
-
-
-    def withClass[T <: HttpServlet](servletKey: Class[T]) {
-      builder.`with`(servletKey)
-    };
-
-    def withClass[T <: HttpServlet](
-            servletKey: Class[T],
-            params: java.util.Map[String, String]) {builder.`with`(servletKey, params)};
-
-    def withClass[T <: HttpServlet](servletKey: Key[T]) {
-      builder.`with`(servletKey)
-    };
-
-    def withClass[T <: HttpServlet](
-            servletKey: Key[T],
-            params: java.util.Map[String, String]) {builder.`with`(servletKey, params)};
-
   }
 
   /**
