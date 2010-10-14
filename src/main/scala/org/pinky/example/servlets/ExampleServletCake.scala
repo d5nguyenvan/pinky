@@ -30,7 +30,6 @@ trait CakeExampleContainer extends CakeExampleComponent{
 trait ExampleServletCakeContainer {
   this: CakeExampleComponent =>
 
-  @Singleton
   class ExampleServletCake extends PinkyServlet {
     GET {
       (request: HttpServletRequest, response: HttpServletResponse) =>

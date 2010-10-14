@@ -34,10 +34,10 @@ class CakeFilterBuilder[T](module: ScalaServletModule, filter: Filter) extends B
 }
 class CakeServletBuilder[T](module: ScalaServletModule, servlet: HttpServlet) extends Builder[T] {
   def toUrl(pattern: String, patterns: String*) {
-     module._serve(pattern, patterns: _*).by(servlet.asClass)
+     module._serve(pattern, patterns: _*).`with`(servlet.asClass)
   }
   def toRegexUrl(pattern: String, patterns: String*){
-     module._serveRegex(pattern, patterns: _*).by(servlet.asClass)
+     module._serveRegex(pattern, patterns: _*).`with`(servlet.asClass)
   }
 }
 

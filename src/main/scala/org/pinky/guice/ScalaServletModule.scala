@@ -35,10 +35,10 @@ abstract class Builder[T]() {
 
 class ServletBuilder[T <: HttpServlet](module: ScalaServletModule)(implicit m:Manifest[T]) extends Builder[T] {
   def toUrl(pattern: String, patterns: String*) {
-     module._serve(pattern, patterns: _*).by((m.erasure.asInstanceOf[Class[T]]))
+     module._serve(pattern, patterns: _*).`with`((m.erasure.asInstanceOf[Class[T]]))
   }
   def toRegexUrl(pattern: String, patterns: String*){
-     module._serveRegex(pattern, patterns: _*).by((m.erasure.asInstanceOf[Class[T]]))
+     module._serveRegex(pattern, patterns: _*).`with`((m.erasure.asInstanceOf[Class[T]]))
   }
 }
 

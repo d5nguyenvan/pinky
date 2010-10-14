@@ -1,8 +1,5 @@
 package org.pinky.guice
 
-;
-
-
 
 import com.google.inject.Key
 import com.google.inject.servlet._
@@ -47,7 +44,7 @@ object DSLFixes {
 
     def by[T <: HttpServlet](servletKey: Key[T]) {builder.`with`(servletKey)};
 
-    def by[T <: HttpServlet, S](
+    def by[T <: HttpServlet](
             servletKey: Key[T],
             params: java.util.Map[String, String]) {builder.`with`(servletKey, params)};
 

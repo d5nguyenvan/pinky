@@ -49,9 +49,7 @@ class PinkyProject(info: ProjectInfo) extends DefaultWebProject(info) {
     val akka = "se.scalablesolutions.akka" % "akka-core_2.8.0.RC3" % "0.9.1" % "compile"
 
     //guice
-    val guice = "com.google.code.guice" % "guice" % "2.0.1" % "compile" 
-    val guiceServlet = "com.google.code.guice" % "guice-servlet" % "2.0.1" % "compile" 
-    val aopalliance = "aopalliance" % "aopalliance" % "1.0" % "compile"
+    val guiceServlet = "com.google.code.guice" % "guice-servlet" % "3.0-r1291" % "compile" 
     val scalaGuice = "scala-guice" % "scala-guice" % "0.1" from "http://guice-maven.googlecode.com/svn/trunk/scala-guice/scala-guice_2.8.0-0.1.jar"
     val servlet = "javax.servlet" % "servlet-api" % "2.5" % "provided"
 

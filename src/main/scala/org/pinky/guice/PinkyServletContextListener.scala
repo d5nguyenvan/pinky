@@ -12,7 +12,10 @@ import com.google.inject.Guice
  * @author peter hausel gmail com (Peter Hausel)
  */
 abstract class PinkyServletContextListener extends GuiceServletContextListener {
-  
+
+  implicit def builderToRichBuilder(
+            builder: com.google.inject.servlet.ServletModule.ServletKeyBindingBuilder) = new DSLFixes.RichBuilder(builder);
+
   var modules: Array[Module] = _
 
 
