@@ -8,10 +8,9 @@ import scala.io.Source
 import org.eclipse.jetty.continuation.Continuation
 import scala.xml._
 import org.pinky.util.ARM.using
-import org.pinky.actor.Resume
-import org.pinky.core.ActorCometClient
 import java.util.concurrent.ScheduledThreadPoolExecutor
 import se.scalablesolutions.akka.actor.{ActorRef, Actor}
+import org.pinky.actor.{ActorCometClient, Resume}
 
 /**
  * Created by IntelliJ IDEA.

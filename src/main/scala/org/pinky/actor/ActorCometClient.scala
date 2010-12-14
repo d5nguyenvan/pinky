@@ -1,9 +1,8 @@
-package org.pinky.core
+package org.pinky.actor
 
 import javax.servlet.http.HttpServletRequest
 import java.io.PrintWriter
 import org.eclipse.jetty.continuation.Continuation
-import org.pinky.actor.{Resume, Client}
 
 abstract class ActorCometClient(continuation: Continuation, request: HttpServletRequest) extends Client {
   if (workers != null) for (actorRef <- workers if !actorRef.isRunning) thisRef.startLink(actorRef)

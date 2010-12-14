@@ -4,7 +4,8 @@ package org.pinky.example.servlets
 import com.google.inject._
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
 import se.scalablesolutions.akka.actor.{ActorRef, Actor}
-import org.pinky.core.{PinkyServlet, ActorClient, Dispatch}
+import org.pinky.core.PinkyServlet
+import org.pinky.actor.ActorClient
 
 class PingActor(pong: ActorRef) extends Actor {
   def receive = {

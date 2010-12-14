@@ -3,7 +3,7 @@ package org.pinky.comet
 import javax.servlet.http.{HttpServlet, HttpServletRequest, HttpServletResponse}
 import org.eclipse.jetty.continuation.{ContinuationSupport, Continuation}
 import java.lang.reflect.ParameterizedType
-import org.pinky.core.ActorCometClient
+import org.pinky.actor.ActorCometClient
 
 
 /**

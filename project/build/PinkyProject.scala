@@ -20,15 +20,13 @@ import sbt._
 class PinkyProject(info: ProjectInfo) extends DefaultProject(info) {
   override def compileOptions = super.compileOptions ++ Seq(Unchecked)
 
-  override def ivyXML =
-    <dependencies>
-  <exclude module="guice-all"/>
-  </dependencies>
+  override def ivyXML = <dependencies><exclude module="guice-all" /></dependencies>
 
   //---------
   //REPOSITORIES
   //---------
   //core
+  val scalatools = "scalatools" at "http://scala-tools.org/repo-snapshots"
   val guiceMaven = "guice maven repository" at "http://guice-maven.googlecode.com/svn/trunk"
   //akka repositories
   val akka_netty = "akka netty" at "https://repository.jboss.org/nexus/content/repositories/releases"

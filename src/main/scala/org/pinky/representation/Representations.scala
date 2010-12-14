@@ -9,6 +9,5 @@ package org.pinky.representation
  */
 trait Representations {
   def mode: Map[String, Representation]
-
   def contentType: Map[String, String]
 }

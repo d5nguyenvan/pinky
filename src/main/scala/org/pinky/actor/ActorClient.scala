@@ -1,6 +1,4 @@
-package org.pinky.core
-
-import org.pinky.actor.Client
+package org.pinky.actor
 
 
 trait ActorClient extends Client {

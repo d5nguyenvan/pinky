@@ -5,6 +5,7 @@ import com.google.inject._
 import java.io.{BufferedWriter, OutputStreamWriter, PrintWriter, StringWriter}
 import org.pinky.representation.Representations
 
+
 trait Dispatch {
   def call(request: HttpServletRequest, response: HttpServletResponse)(block: => Map[String, AnyRef])
 }

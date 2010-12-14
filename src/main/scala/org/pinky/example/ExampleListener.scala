@@ -1,13 +1,13 @@
 package org.pinky.example
 
 
-import org.pinky.core.ActorClient
 import servlets._
 import org.pinky.comet.CometServlet
 import org.eclipse.jetty.continuation.ContinuationFilter
 import com.google.inject.{Scopes, AbstractModule}
 import org.pinky.guice.{CakeServletModule, ScalaServletModule, ScalaModule, PinkyServletContextListener, RepresentationModule}
 import com.google.inject.servlet.ServletModule
+import org.pinky.actor.ActorClient
 
 /**
  * Listener example which demonstrates how to configure guice managed filters, servlets and other components the "pinky way"
