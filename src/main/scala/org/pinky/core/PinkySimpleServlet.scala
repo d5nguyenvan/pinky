@@ -20,13 +20,14 @@ class PinkySimpleServlet extends HttpServlet {
 
   private def makeCall(method: String, request: HttpServletRequest, response: HttpServletResponse) {
     try {
-      val out = response.getOutputStream
+
       val handler = handlers(method)
       val (contenttype, content) = handler(request, response)
       response.setContentType(contenttype)
       //handle streams differently
       content match {
         case in: InputStream => {
+          val out = response.getOutputStream
           val bytes = new Array[Byte](2000)
           var bytesRead = 0
           try {
@@ -40,6 +41,7 @@ class PinkySimpleServlet extends HttpServlet {
           }
         }
         case image: BufferedImage => {
+          val out = response.getOutputStream
           ImageIO.write(image, "JPG", out)
           out.close()
         }
