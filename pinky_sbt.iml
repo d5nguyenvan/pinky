@@ -13,31 +13,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" scope="RUNTIME">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/src/main/resources" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/lib_managed/scala_2.8.0/compile" />
-          <root url="file://$MODULE_DIR$/lib_managed/scala_2.8.0/provided" />
-          <root url="file://$MODULE_DIR$/lib_managed/scala_2.8.0/test" />
-          <root url="file://$MODULE_DIR$/project/boot/scala-2.8.0/lib" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/lib_managed/scala_2.8.0/compile" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/lib_managed/scala_2.8.0/provided" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/lib_managed/scala_2.8.0/test" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/project/boot/scala-2.8.0/lib" recursive="false" />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="pinky_compile" level="project" />
+    <orderEntry type="library" name="pinky_test" level="project" />
+    <orderEntry type="library" name="pinky_provided" level="project" />
+    <orderEntry type="library" name="scala-compiler-2.8.1" level="application" />
   </component>
 </module>
 
