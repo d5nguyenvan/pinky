@@ -19,10 +19,10 @@ class PinkySimpleServlet extends HttpServlet {
   type XHtml = xml.Elem
 
   private def makeCall(method: String, request: HttpServletRequest, response: HttpServletResponse) {
-    try {
 
-      val handler = handlers(method)
-      val (contenttype, content) = handler(request, response)
+      if (handlers.contains(method) == false) throw new RuntimeException("could not find a handler with the request method:"+method+" in:"+handlers.toString)
+
+      val (contenttype, content) = handlers(method)(request, response)
       response.setContentType(contenttype)
       //handle streams differently
       content match {
@@ -52,12 +52,10 @@ class PinkySimpleServlet extends HttpServlet {
           writer.close()
         }
       }
-    } catch {
-      case ex: NoSuchElementException => throw new RuntimeException("could not find a handler for this request method, you'll need to implement a call to " + request.getMethod)
-    }
+
   }
 
-  private val handlers = collection.mutable.Map[String, Function2[HttpServletRequest, HttpServletResponse, Tuple2[String, Any]]]()
+  protected val handlers = collection.mutable.Map[String, Function2[HttpServletRequest, HttpServletResponse, Tuple2[String, Any]]]()
 
 
   override def service(request: HttpServletRequest, response: HttpServletResponse) = {

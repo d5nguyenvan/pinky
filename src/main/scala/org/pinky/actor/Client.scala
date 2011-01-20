@@ -2,9 +2,8 @@ package org.pinky.actor
 
 import java.util.regex.Pattern
 import java.util.concurrent.{TimeUnit, ThreadPoolExecutor, ScheduledThreadPoolExecutor}
-import se.scalablesolutions.akka.actor.Actor._
 import org.pinky.annotation.Every
-import se.scalablesolutions.akka.actor.{ActorRef, Actor}
+import akka.actor._
 
 case object UnSchedule
 case object Resume
@@ -16,7 +15,7 @@ trait Client {
   protected class DefaultActor(workers: Seq[ActorRef] = Array[ActorRef](), executor: ScheduledThreadPoolExecutor = executor) extends Actor {
     val thisRef = Actor.actorOf(this)
 
-    override def shutdown = {
+    override def postStop = {
       if (workers != null) for (worker <- workers if worker.isRunning) thisRef.unlink(worker)
       if (thisRef.isRunning) thisRef.unlink(thisRef)
       executor.shutdown
@@ -35,7 +34,7 @@ trait Client {
   
   val delay: Every = this.getClass().getAnnotation(classOf[Every])
 
-  val thisRef = actorOf(new DefaultActor(workers, executor))
+  val thisRef = Actor.actorOf(new DefaultActor(workers, executor))
 
   def fireStarter(block: => Unit): Unit = {
     if (!thisRef.isRunning) thisRef.startLink(thisRef)

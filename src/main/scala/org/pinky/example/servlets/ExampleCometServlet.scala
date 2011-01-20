@@ -7,9 +7,7 @@ import java.net.URL
 import scala.io.Source
 import org.eclipse.jetty.continuation.Continuation
 import scala.xml._
-import org.pinky.util.ARM.using
-import java.util.concurrent.ScheduledThreadPoolExecutor
-import se.scalablesolutions.akka.actor.{ActorRef, Actor}
+import akka.actor.Actor
 import org.pinky.actor.{ActorCometClient, Resume}
 
 /**

@@ -1,7 +1,7 @@
 package org.pinky.code.util
 
 import java.util.concurrent.CountDownLatch
-import se.scalablesolutions.akka.actor.Actor
+import akka.actor.Actor
 
 /**
  * Created by IntelliJ IDEA.

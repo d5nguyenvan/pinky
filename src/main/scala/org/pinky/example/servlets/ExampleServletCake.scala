@@ -3,7 +3,7 @@ package org.pinky.example.servlets
 
 import com.google.inject._
 import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
-import se.scalablesolutions.akka.actor.{ActorRef, Actor}
+import akka.actor.{ActorRef, Actor}
 import org.pinky.core.PinkyServlet
 
 

@@ -2,8 +2,8 @@ package org.pinky.example.servlets
 
 
 import com.google.inject._
-import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
-import se.scalablesolutions.akka.actor.{ActorRef, Actor}
+import javax.servlet.http.{HttpServletResponse, HttpServletRequest}
+import akka.actor.{ActorRef, Actor}
 import org.pinky.core.PinkyServlet
 import org.pinky.actor.ActorClient
 
@@ -22,7 +22,7 @@ class PongActor extends Actor {
   def receive = {
     case "whatsnext" => {
       println("pong")
-      reply("yay")
+      self.reply("yay")
     }
     case _ => println("Pong:unknown message was received")
   }
